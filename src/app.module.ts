@@ -6,10 +6,12 @@ import { DatabaseModule } from './db/database.module';
 import { AppAdminModule } from './modules/appAdmin/app-admin/app-admin.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
+import { AppsModule } from './modules/app/app/apps.module';
 
 @Module({
   imports: [
     AppAdminModule,
+    AppsModule,
     DatabaseModule,
     FeatureMdModule,
     ConfigModule.forRoot({
