@@ -31,7 +31,7 @@ export class AppAdminAuthService {
   async login(email: string, password: string) {
     const appAdmin = await this.validateUser(email, password);
     if (appAdmin) {
-      const payload = { sub: appAdmin.id, username: appAdmin.email };
+      const payload: {sub: number, username: string} = { sub: appAdmin.id, username: appAdmin.email };
 
       const token: string = await this.jwtService.sign(payload, {
         secret: this.configService.get('APP_ADMIN_SECRET'),

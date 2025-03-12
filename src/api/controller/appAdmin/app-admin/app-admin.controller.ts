@@ -17,7 +17,7 @@ import { AppAdminAuthService } from 'src/api/service/appAdmin/appAdminAuth.servi
 import { StringDecoder } from 'node:string_decoder';
 
 
-@Controller('app-admin')
+@Controller('app-admins')
 export class AppAdminController {
   constructor(
     private readonly appAdminService: AppAdminService,
@@ -41,7 +41,7 @@ export class AppAdminController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
   async login(@Body() dto: LoginAppAdminDto): Promise<LoginAppAdminResponseDto> {
-    const token: {access_token: string} | boolean = await this.appAdminAuthService.login(dto.email, dto.password);
+    const token = await this.appAdminAuthService.login(dto.email, dto.password);
     if (token) {
       return new LoginAppAdminResponseDto({access_token: token.access_token});
     }

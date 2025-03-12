@@ -48,6 +48,20 @@ export class AppRepository {
     }
   }
 
+  async getByOwnerId(owner_id: number) {
+    try {
+      const app: App[] | undefined = await this.modelClass
+        .query()
+        .select('*')
+        .where('owner_id', '=', owner_id);
+      
+      return app;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   async create(
     appAdminId: number,
     secret: string,

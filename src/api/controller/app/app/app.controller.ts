@@ -3,6 +3,7 @@ import {
     UseInterceptors,
     SerializeOptions,
     ClassSerializerInterceptor,
+    Get,
     Post,
     Patch,
     Body,
@@ -16,11 +17,12 @@ import { AppsService } from 'src/api/service/app/app.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
 import { CreateAppResponseDto } from 'src/api/dtoResponse/app/appCreateResponse.dto';
 import { UpdateAppResponseDto } from 'src/api/dtoResponse/app/appUpdateResponse.dto';
+import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwnerId';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
 
-@Controller('app')
+@Controller('apps')
 export class AppsController {
     constructor(private readonly appService: AppsService,
         private readonly jwtService: JwtService,
@@ -46,6 +48,21 @@ export class AppsController {
       async changeSecret(@Param('id', ParseIntPipe) id: number): Promise<UpdateAppResponseDto> {
         await this.appService.update(id)
         return new UpdateAppResponseDto({message: 'successfully updated'})
+        
+      }
+
+      @ApiResponse({ status: 200, type: [GetListAppResponseDto] })
+      @Get()
+      async getListByOwnerId(@Req() request: Request): Promise<GetListAppResponseDto[] | undefined> {
+        const token = request.headers.authorization
+        if (token) {
+            const payload = this.jwtService.decode(token.substring(7, token.length))
+            const ownerId = payload.sub
+            if (ownerId) {
+                return await this.appService.getByOwnerId(ownerId)
+            }
+            
+        }
         
       }
 }

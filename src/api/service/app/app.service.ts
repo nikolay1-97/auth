@@ -2,7 +2,8 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { AppRepository } from 'src/db/repositories/app/repository';
 import { SecretService } from 'src/feature-md/secret/secret.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
-import { appendFile } from 'fs/promises';
+import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwnerId';
+import { plainToInstance } from 'class-transformer';
 
 
 @Injectable()
@@ -38,5 +39,16 @@ export class AppsService {
     const secret = await this.secretService.getSecret()
     await this.appRepository.update(id, secret);
     return true;
+  }
+
+  async getByOwnerId(
+    owner_id: number,
+  ): Promise<GetListAppResponseDto[]> {
+    const apps = await this.appRepository.getByOwnerId(owner_id);
+
+    if (!apps) {
+      throw new BadRequestException('apps not found');
+    }
+    return plainToInstance(GetListAppResponseDto, apps)
   }
 }
