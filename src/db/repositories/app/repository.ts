@@ -93,6 +93,16 @@ export class AppRepository {
       return secret;
     } catch (e) {
       console.log(e);
+      throw e;
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      await this.modelClass.query().deleteById(id);
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
   }
 }

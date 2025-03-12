@@ -6,6 +6,7 @@ import {
     Get,
     Post,
     Patch,
+    Delete,
     Body,
     Req,
     Param,
@@ -18,6 +19,7 @@ import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
 import { CreateAppResponseDto } from 'src/api/dtoResponse/app/appCreateResponse.dto';
 import { UpdateAppResponseDto } from 'src/api/dtoResponse/app/appUpdateResponse.dto';
 import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwnerId';
+import { DeleteAppResponseDto } from 'src/api/dtoResponse/app/appDeleteResponse.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
@@ -61,8 +63,15 @@ export class AppsController {
             if (ownerId) {
                 return await this.appService.getByOwnerId(ownerId)
             }
-            
         }
-        
       }
+
+      
+      @ApiResponse({ status: 200, type: DeleteAppResponseDto })
+      @Delete(':id')
+      async delete(
+      @Param('id', ParseIntPipe) id: number,
+      ): Promise<DeleteAppResponseDto> {
+        return await this.appService.delete(id);
+  }
 }

@@ -7,11 +7,13 @@ import { AppAdminModule } from './modules/appAdmin/app-admin/app-admin.module';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 import { AppsModule } from './modules/app/app/apps.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
     AppAdminModule,
     AppsModule,
+    UserModule,
     DatabaseModule,
     FeatureMdModule,
     ConfigModule.forRoot({

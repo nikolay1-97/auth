@@ -3,6 +3,7 @@ import { AppRepository } from 'src/db/repositories/app/repository';
 import { SecretService } from 'src/feature-md/secret/secret.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
 import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwnerId';
+import { DeleteAppResponseDto } from 'src/api/dtoResponse/app/appDeleteResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
 
@@ -51,4 +52,16 @@ export class AppsService {
     }
     return plainToInstance(GetListAppResponseDto, apps)
   }
+
+  async delete(id: number): Promise<DeleteAppResponseDto> {
+    const app = await this.appRepository.getById(id);
+
+    if (!app) {
+      throw new BadRequestException('app not found');
+    }
+    await this.appRepository.delete(id);
+    return new DeleteAppResponseDto({id: app.id, title: app.title})
+    
+}
+
 }
