@@ -4,9 +4,12 @@ import {
     SerializeOptions,
     ClassSerializerInterceptor,
     Post,
+    Get,
     Patch,
     Body,
+    Param,
     Req,
+    ParseIntPipe,
     BadRequestException,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -17,6 +20,7 @@ import { LoginUserDto } from 'src/api/dto/user/userLogin.dto';
 import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse.dto';
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto'; 
 import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
+import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserAuthService } from 'src/api/service/user/userAuth.service';
 import { JwtService } from '@nestjs/jwt';
@@ -74,5 +78,11 @@ export class UserController {
             }
         }
         throw new BadRequestException('user not found')
+  }
+
+  @ApiResponse({ status: 200, type: [GetUsersByAppIdUserResponseDto] })
+  @Get(':id')
+  async getListByAppId(@Param('id', ParseIntPipe) id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
+    return await this.userService.getByAppId(id);
   }
 }

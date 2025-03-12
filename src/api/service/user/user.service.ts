@@ -6,7 +6,8 @@ import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateResponse.dto';
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto';
 import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
-import { JwtService } from '@nestjs/jwt';
+import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
+import { plainToInstance } from 'class-transformer';
 
 
 @Injectable()
@@ -54,4 +55,12 @@ export class UserService {
     return new ChangePasswordResponseDto({message: 'successfully updated'})
 
   }
+
+  async getByAppId(
+      app_id: number,
+    ): Promise<GetUsersByAppIdUserResponseDto[]> {
+      const users = await this.userRepository.getByAppid(app_id);
+  
+      return plainToInstance(GetUsersByAppIdUserResponseDto, users)
+    }
 }

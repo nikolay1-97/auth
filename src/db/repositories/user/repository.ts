@@ -36,6 +36,20 @@ export class UserRepository {
     }
   }
 
+  async getByAppid(app_id: number) {
+    try {
+      const user: User[] | undefined = await this.modelClass
+        .query()
+        .select('*')
+        .where('app_id', '=', app_id);
+      
+      return user;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   async create(app_id: number, dto: CreateUserDto) {
     try {
       const secret_data: string = `{"question": "${dto.data.question}", "answer": "${dto.data.answer}"}`

@@ -47,9 +47,6 @@ export class AppsService {
   ): Promise<GetListAppResponseDto[]> {
     const apps = await this.appRepository.getByOwnerId(owner_id);
 
-    if (!apps) {
-      throw new BadRequestException('apps not found');
-    }
     return plainToInstance(GetListAppResponseDto, apps)
   }
 
