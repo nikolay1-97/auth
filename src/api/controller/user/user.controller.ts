@@ -4,16 +4,22 @@ import {
     SerializeOptions,
     ClassSerializerInterceptor,
     Post,
+    Patch,
     Body,
+    Req,
     BadRequestException,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateResponse.dto';
 import { ApiResponse } from '@nestjs/swagger';
 import { LoginUserDto } from 'src/api/dto/user/userLogin.dto';
-import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse.dto'; 
+import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse.dto';
+import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto'; 
+import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserAuthService } from 'src/api/service/user/userAuth.service';
+import { JwtService } from '@nestjs/jwt';
 
 
 
@@ -22,6 +28,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: UserAuthService,
+    private readonly jwtService: JwtService,
  ) {}
 
   @ApiResponse({ status: 201, type: CreateUserResponseDto })
@@ -50,5 +57,22 @@ export class UserController {
       return new LoginUserResponseDto({access_token: token.access_token});
     }
     throw new BadRequestException('неверный логин или пароль');
+  }
+
+  @ApiResponse({ status: 200, type: ChangePasswordResponseDto })
+  @Patch()
+  async changePassword(
+    @Body() dto: UserChangePasswordDto,
+    @Req() request: Request,
+  ): Promise<ChangePasswordResponseDto> {
+    const token = request.headers.authorization
+        if (token) {
+            const payload = this.jwtService.decode(token.substring(7, token.length))
+            const userId = payload.sub
+            if (userId) {
+                return await this.userService.changePassword(userId, dto)
+            }
+        }
+        throw new BadRequestException('user not found')
   }
 }

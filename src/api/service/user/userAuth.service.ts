@@ -4,6 +4,7 @@ import { AppRepository } from 'src/db/repositories/app/repository';
 import { PasswordService } from 'src/feature-md/password/password.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { BadRequestException } from '@nestjs/common';
 
 @Injectable()
 export class UserAuthService {
@@ -35,7 +36,7 @@ export class UserAuthService {
     if (user) {
       const app = await this.appRepository.getBySecret(secret)
       if (!app) {
-        return false
+        throw new BadRequestException('app not found')
       }
       const payload: {
         sub: number,

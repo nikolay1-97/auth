@@ -4,6 +4,9 @@ import { AppRepository } from 'src/db/repositories/app/repository';
 import { PasswordService } from 'src/feature-md/password/password.service';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateResponse.dto';
+import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto';
+import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
@@ -30,5 +33,25 @@ export class UserService {
       return new CreateUserResponseDto({email: dto.email});
     }
     throw new BadRequestException('user already exists');
+  }
+
+  async changePassword(
+    id: number,
+    dto: UserChangePasswordDto,
+  ): Promise<ChangePasswordResponseDto> {
+    const user =
+      await this.userRepository.getById(id);
+    if (!user) {
+        throw new BadRequestException('user not found')
+    }
+    const qst: string = user.data.question;
+    const answer: string = user.data.answer;
+
+    if (qst != dto.data.question || answer != dto.data.answer) {
+        throw new BadRequestException('incorrect data')
+    }
+    await this.userRepository.changePassword(id, dto.password)
+    return new ChangePasswordResponseDto({message: 'successfully updated'})
+
   }
 }

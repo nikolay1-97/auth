@@ -52,4 +52,21 @@ export class UserRepository {
       throw e;
     }
   }
+
+  async changePassword(id: number, password: string) {
+    try {
+      const newPassword = await this.passwordService.getPasswordHash(password);
+      const data: {password: string} = {password: newPassword};
+      await this.modelClass
+        .query()
+        .patch(data)
+        .where({ id })
+        .returning('*')
+        .first();
+      return true;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
 }
