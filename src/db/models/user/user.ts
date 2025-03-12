@@ -3,7 +3,7 @@ import { BaseModel } from "../baseModel";
 export class User extends BaseModel {
   static tableName = 'users';
 
-  appId: number;
+  app_id: number;
   email: string;
   password: string;
   data: Record<string, any>;

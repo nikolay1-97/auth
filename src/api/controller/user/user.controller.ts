@@ -11,6 +11,7 @@ import {
     Req,
     ParseIntPipe,
     BadRequestException,
+    UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
@@ -21,6 +22,7 @@ import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto'; 
 import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
 import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
+import { UserGuard } from 'src/api/guards/user/user.guards';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserAuthService } from 'src/api/service/user/userAuth.service';
 import { JwtService } from '@nestjs/jwt';
@@ -63,6 +65,7 @@ export class UserController {
     throw new BadRequestException('неверный логин или пароль');
   }
 
+  @UseGuards(UserGuard)
   @ApiResponse({ status: 200, type: ChangePasswordResponseDto })
   @Patch()
   async changePassword(
