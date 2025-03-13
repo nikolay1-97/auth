@@ -59,6 +59,6 @@ export class AppsService {
     await this.appRepository.delete(id);
     return new DeleteAppResponseDto({id: app.id, title: app.title})
     
-}
+  }
 
 }

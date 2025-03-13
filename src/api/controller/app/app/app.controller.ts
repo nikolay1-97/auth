@@ -73,5 +73,5 @@ export class AppsController {
       @Param('id', ParseIntPipe) id: number,
       ): Promise<DeleteAppResponseDto> {
         return await this.appService.delete(id);
-  }
+      }
 }

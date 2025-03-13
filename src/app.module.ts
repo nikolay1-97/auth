@@ -8,12 +8,14 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 import { AppsModule } from './modules/app/app/apps.module';
 import { UserModule } from './modules/user/user.module';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
     AppAdminModule,
     AppsModule,
     UserModule,
+    RoleModule,
     DatabaseModule,
     FeatureMdModule,
     ConfigModule.forRoot({

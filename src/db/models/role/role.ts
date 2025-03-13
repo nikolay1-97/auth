@@ -4,6 +4,6 @@ export class Role extends BaseModel {
   static tableName = 'roles';
 
   title: string;
-  appId: number;
+  app_id: number;
   created_at: string;
 }

@@ -1,8 +1,8 @@
-import { IsString, IsEmail, IsNumber } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
 
-export class GetUsersByAppIdUserResponseDto {
+export class RoleGetListByAppIdResponseDto {
+
   @ApiProperty()
   @IsNumber()
   readonly id: number;
@@ -13,14 +13,7 @@ export class GetUsersByAppIdUserResponseDto {
 
   @ApiProperty()
   @IsString()
-  @IsEmail()
-  readonly email: string;
-
-  @Exclude()
-  password: string;
-
-  @Exclude()
-  data: string;
+  readonly title: string;
 
   @ApiProperty()
   @IsString()
@@ -31,7 +24,8 @@ export class GetUsersByAppIdUserResponseDto {
   readonly updated_at: string;
 
 
-  constructor(partial: Partial<GetUsersByAppIdUserResponseDto>) {
+
+  constructor(partial: Partial<RoleGetListByAppIdResponseDto>) {
     Object.assign(this, partial)
   }
 }

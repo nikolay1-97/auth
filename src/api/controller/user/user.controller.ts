@@ -84,8 +84,8 @@ export class UserController {
   }
 
   @ApiResponse({ status: 200, type: [GetUsersByAppIdUserResponseDto] })
-  @Get(':id')
-  async getListByAppId(@Param('id', ParseIntPipe) id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
-    return await this.userService.getByAppId(id);
+  @Get(':app_id')
+  async getListByAppId(@Param('app_id', ParseIntPipe) app_id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
+    return await this.userService.getByAppId(app_id);
   }
 }
