@@ -9,6 +9,7 @@ import configuration from './configuration';
 import { AppsModule } from './modules/app/app/apps.module';
 import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
+import { UserRoleModule } from './modules/userRole/userRole.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RoleModule } from './modules/role/role.module';
     AppsModule,
     UserModule,
     RoleModule,
+    UserRoleModule,
     DatabaseModule,
     FeatureMdModule,
     ConfigModule.forRoot({

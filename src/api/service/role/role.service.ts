@@ -71,6 +71,6 @@ export class RoleService {
     const roles = await this.roleRepository.getByAppId(id);
 
     return plainToInstance(RoleGetListByAppIdResponseDto, roles)
-}
+  }
 
 }

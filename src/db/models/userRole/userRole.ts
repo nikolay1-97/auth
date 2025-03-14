@@ -1,8 +1,13 @@
 import { BaseModel } from "../baseModel";
+import { Model } from "objection";
 
-export class UserRole extends BaseModel {
-  static tableName = 'userRole';
+export class UserRole extends Model {
+  static tableName = 'user_role';
 
-  userId: number;
-  roleId: number;
+  static get idColumn() {
+    return 'user_id';
+  }
+
+  user_id: number;
+  role_id: number;
 }
