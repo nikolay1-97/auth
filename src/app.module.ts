@@ -10,6 +10,7 @@ import { AppsModule } from './modules/app/app/apps.module';
 import { UserModule } from './modules/user/user.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserRoleModule } from './modules/userRole/userRole.module';
+import { SuperAdminModule } from './modules/superAdmin/superAdmin.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserRoleModule } from './modules/userRole/userRole.module';
     UserModule,
     RoleModule,
     UserRoleModule,
+    SuperAdminModule,
     DatabaseModule,
     FeatureMdModule,
     ConfigModule.forRoot({
