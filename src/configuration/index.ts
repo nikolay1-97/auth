@@ -8,5 +8,6 @@ export default () => ({
     db_name: process.env.DB_NAME,
     user: process.env.USER,
     password: process.env.PASSWORD,
+    admin_password: process.env.ADMIN_PASSWORD,
   });
   

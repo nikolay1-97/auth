@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/db/repositories/user/repository';
 import { AppRepository } from 'src/db/repositories/app/repository';
+import { UserRoleRepository } from 'src/db/repositories/userRole/repository';
 import { PasswordService } from 'src/feature-md/password/password.service';
+import { UserRole } from 'src/db/models/userRole/userRole';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { BadRequestException } from '@nestjs/common';
@@ -11,6 +13,7 @@ export class UserAuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly appRepository: AppRepository,
+    private readonly userRoleRepository: UserRoleRepository,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -38,10 +41,12 @@ export class UserAuthService {
       if (!app) {
         throw new BadRequestException('app not found')
       }
+      const roles = await this.userRoleRepository.getUserRoles(user.id)
       const payload: {
         sub: number,
         username: string,
-    } = { sub: user.id, username: user.email };
+        roles: UserRole[] | []
+    } = { sub: user.id, username: user.email, roles: roles };
 
       const token: string = await this.jwtService.signAsync(payload, {
         secret: app.secret,
