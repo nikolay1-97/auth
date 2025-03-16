@@ -68,6 +68,10 @@ export class RoleService {
   }
 
   async getListByAppId(id: number): Promise<RoleGetListByAppIdResponseDto[]> {
+    const app = await this.appRepository.getById(id)
+    if (!app) {
+        throw new BadRequestException('app not found')
+    }
     const roles = await this.roleRepository.getByAppId(id);
 
     return plainToInstance(RoleGetListByAppIdResponseDto, roles)

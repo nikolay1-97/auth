@@ -12,6 +12,7 @@ import { AppAdminRepository } from 'src/db/repositories/appAdmin/repository';
 import { UserRepository } from 'src/db/repositories/user/repository';
 import { UserService } from 'src/api/service/user/user.service';
 import { AppRepository } from 'src/db/repositories/app/repository';
+import { RoleRepository } from 'src/db/repositories/role/repository';
 import { User } from 'src/db/models/user/user';
 import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
 
@@ -28,6 +29,7 @@ import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
     UserRepository,
     UserService,
     User,
+    RoleRepository,
     AppRepository,
     SuperAdminRepository,
     SuperAdmin,

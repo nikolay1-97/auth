@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserRepository } from 'src/db/repositories/user/repository';
 import { AppRepository } from 'src/db/repositories/app/repository';
+import { RoleRepository } from 'src/db/repositories/role/repository';
 import { UserRoleRepository } from 'src/db/repositories/userRole/repository';
 import { UserController } from 'src/api/controller/user/user.controller';
 import { User } from 'src/db/models/user/user';
@@ -17,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
   providers: [
     UserService,
     UserRepository,
+    RoleRepository,
     UserRoleRepository,
     User,
     PasswordService,

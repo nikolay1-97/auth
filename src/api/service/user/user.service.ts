@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { UserRepository } from 'src/db/repositories/user/repository';
 import { AppRepository } from 'src/db/repositories/app/repository';
 import { PasswordService } from 'src/feature-md/password/password.service';
+import { RoleRepository } from 'src/db/repositories/role/repository';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateResponse.dto';
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto';
@@ -13,6 +14,7 @@ import { ChangePasswordUserDto } from 'src/api/dto/user/admin/userChangePassword
 import { ChangePasswordUserResponseDto } from 'src/api/dtoResponse/user/admin/userChangePasswordResponse.dto';
 import { DeleteUserResponseDto } from 'src/api/dtoResponse/user/admin/userDeleteResponse.dto';
 import { GetUsersByAppIdForAdminResponseDto } from 'src/api/dtoResponse/user/admin/userGetUsersByAppIdForAdmin.dto';
+import { GetUsersByAppIdAndRoleIdResponseDto } from 'src/api/dtoResponse/user/userGetUsersByAppIdAndRoleIdResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
 
@@ -21,6 +23,7 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly appRepository: AppRepository,
+    private readonly roleRepository: RoleRepository,
     private readonly passwordService: PasswordService,
   ) {}
 
@@ -65,6 +68,10 @@ export class UserService {
   async getByAppId(
       app_id: number,
     ): Promise<GetUsersByAppIdUserResponseDto[]> {
+      const app = await this.appRepository.getById(app_id)
+      if (!app) {
+        throw new BadRequestException('app not found')
+      }
       const users = await this.userRepository.getByAppid(app_id);
   
       return plainToInstance(GetUsersByAppIdUserResponseDto, users)
@@ -73,9 +80,32 @@ export class UserService {
   async getByAppIdForAdmin(
     app_id: number,
   ): Promise<GetUsersByAppIdForAdminResponseDto[]> {
+    const app = await this.appRepository.getById(app_id)
+    if (!app) {
+      throw new BadRequestException('app not found')
+    }
     const users = await this.userRepository.getByAppid(app_id);
 
     return plainToInstance(GetUsersByAppIdForAdminResponseDto, users)
+  }
+
+  async getByAppIdAndRoleId(
+    app_id: number,
+    role_id: number,
+  ): Promise<GetUsersByAppIdAndRoleIdResponseDto[]> {
+    const app = await this.appRepository.getById(app_id)
+    if (!app) {
+      throw new BadRequestException('app not found')
+    }
+
+    const role = await this.roleRepository.getById(role_id)
+    if (!role) {
+        throw new BadRequestException('role not found')
+    }
+
+    const users = await this.userRepository.getByAppIdAndRoleId(app_id, role_id);
+
+    return plainToInstance(GetUsersByAppIdAndRoleIdResponseDto, users)
 }
 
   async changeEmail(

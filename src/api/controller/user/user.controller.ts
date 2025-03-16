@@ -22,6 +22,7 @@ import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto'; 
 import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
 import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
+import { GetUsersByAppIdAndRoleIdResponseDto } from 'src/api/dtoResponse/user/userGetUsersByAppIdAndRoleIdResponse.dto';
 import { UserGuard } from 'src/api/guards/user/user.guards';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserAuthService } from 'src/api/service/user/userAuth.service';
@@ -87,5 +88,14 @@ export class UserController {
   @Get(':app_id')
   async getListByAppId(@Param('app_id', ParseIntPipe) app_id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
     return await this.userService.getByAppId(app_id);
+  }
+
+  @ApiResponse({ status: 200, type: [GetUsersByAppIdAndRoleIdResponseDto] })
+  @Get('apps/:app_id/roles/:role_id')
+  async getUsersByAppIdAndRoleId(
+    @Param('app_id', ParseIntPipe) app_id: number,
+    @Param('role_id', ParseIntPipe) role_id: number,
+): Promise<GetUsersByAppIdAndRoleIdResponseDto[] | undefined> {
+    return await this.userService.getByAppIdAndRoleId(app_id, role_id);
   }
 }

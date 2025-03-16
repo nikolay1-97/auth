@@ -51,6 +51,27 @@ export class UserRepository {
     }
   }
 
+  async getByAppIdAndRoleId(app_id: number, role_id: number) {
+      try {
+          const users: User[] | undefined = await this.modelClass
+          .query()
+          .where('app.id', '=', app_id)
+          .where('role_id', '=', role_id)
+          .join('user_role', 'user_id', '=', 'users.id')
+          .join('app', 'app.id', '=', 'users.app_id')
+          .select(
+            'users.id',
+            'email',
+            'users.created_at',
+            'users.updated_at',
+            );
+          return users;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+  }
+
   async create(app_id: number, dto: CreateUserDto) {
     try {
       const secret_data: string = `{"question": "${dto.data.question}", "answer": "${dto.data.answer}"}`
