@@ -2,6 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
 import { CreateAppAdminDto } from 'src/api/dto/appAdmin/appAdminCreate.dto';
+import { ChangeEmailAppAdminDto } from 'src/api/dto/appAdmin/admin/appAdminChangeEmail.dto';
+import { ChangePasswordAppAdminDto } from 'src/api/dto/appAdmin/admin/appAdminChangePassword.dto';
 import { PasswordService } from 'src/feature-md/password/password.service';
 
 @Injectable()
@@ -49,4 +51,57 @@ export class AppAdminRepository {
       throw e;
     }
   }
+
+  async changeEmail(id: number, dto: ChangeEmailAppAdminDto) {
+      try {
+        await this.modelClass
+          .query()
+          .patch(dto)
+          .where({ id })
+          .returning('*')
+          .first();
+        return dto;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    }
+  
+    async changePassword(id: number, dto: ChangePasswordAppAdminDto) {
+        try {
+          const newPassword = await this.passwordService.getPasswordHash(dto.password)
+          const data = {password: newPassword}
+          await this.modelClass
+            .query()
+            .patch(data)
+            .where({ id })
+            .returning('*')
+            .first();
+          return dto;
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
+    }
+
+    async delete(id: number) {
+        try {
+          await this.modelClass.query().deleteById(id);
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
+    }
+
+    async getAppAdmins() {
+        try {
+          const appAdmin: AppAdmin[] | undefined = await this.modelClass
+            .query();
+    
+          return appAdmin;
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
+      }
 }

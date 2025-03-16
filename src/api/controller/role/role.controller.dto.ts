@@ -19,7 +19,6 @@ import { DeleteRoleResponseDto } from 'src/api/dtoResponse/role/roleDelete.dto';
 import { RoleGetListByAppIdResponseDto } from 'src/api/dtoResponse/role/roleGetListByAppIdResponse.dto';
 
 
-
 @Controller('roles')
 export class RoleController {
     constructor(

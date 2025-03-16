@@ -62,5 +62,5 @@ export class UserService {
       const users = await this.userRepository.getByAppid(app_id);
   
       return plainToInstance(GetUsersByAppIdUserResponseDto, users)
-    }
+  }
 }
