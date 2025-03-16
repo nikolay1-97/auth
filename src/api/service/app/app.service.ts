@@ -1,9 +1,14 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { AppRepository } from 'src/db/repositories/app/repository';
+import { AppAdminRepository } from 'src/db/repositories/appAdmin/repository';
 import { SecretService } from 'src/feature-md/secret/secret.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
 import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwnerId';
 import { DeleteAppResponseDto } from 'src/api/dtoResponse/app/appDeleteResponse.dto';
+import { ChangeTitleAppDto } from 'src/api/dto/app/admin/appChangeTitle.dto';
+import { ChangeTitleAppResponseDto } from 'src/api/dtoResponse/app/admin/appChangeTitleResponse.dto';
+import { DeleteAppForAdminResponseDto } from 'src/api/dtoResponse/app/admin/appDeleteForAdminResponse.dto';
+import { GetListAppByOwnerIdForAdminResponseDto } from 'src/api/dtoResponse/app/admin/appGetListByOwnerIdForAdminResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
 
@@ -12,6 +17,7 @@ export class AppsService {
   constructor(
     private readonly appRepository: AppRepository,
     private readonly secretService: SecretService,
+    private readonly appAdminRepository: AppAdminRepository,
   ) {}
 
   async create(
@@ -50,6 +56,18 @@ export class AppsService {
     return plainToInstance(GetListAppResponseDto, apps)
   }
 
+  async getByOwnerIdForAdmin(
+    owner_id: number,
+  ): Promise<GetListAppByOwnerIdForAdminResponseDto[]> {
+    const appAdmin = await this.appAdminRepository.getById(owner_id)
+    if (!appAdmin) {
+        throw new BadRequestException('appAdmin not found')
+    }
+    const apps = await this.appRepository.getByOwnerId(owner_id);
+
+    return plainToInstance(GetListAppByOwnerIdForAdminResponseDto, apps)
+  }
+
   async delete(id: number): Promise<DeleteAppResponseDto> {
     const app = await this.appRepository.getById(id);
 
@@ -60,5 +78,35 @@ export class AppsService {
     return new DeleteAppResponseDto({id: app.id, title: app.title})
     
   }
+
+  async changeTitle(
+    id: number,
+    dto: ChangeTitleAppDto,
+  ): Promise<ChangeTitleAppResponseDto> {
+    const app = await this.appRepository.getById(id);
+      
+    if (!app) {
+      throw new BadRequestException('app not found');
+    }
+    const appByTitle = await this.appRepository.getByTitle(dto.title)
+    if (appByTitle) {
+        throw new BadRequestException('app already exists')
+    }
+    await this.appRepository.changeTitle(id, dto);
+    return new ChangeTitleAppResponseDto({title: dto.title});
+  }
+
+    async deleteForAdmin(id: number): Promise<DeleteAppForAdminResponseDto> {
+        const app = await this.appRepository.getById(id);
+            
+        if (!app) {
+            throw new BadRequestException('app not found');
+        }
+        await this.appRepository.delete(id);
+        return new DeleteAppForAdminResponseDto({
+            id: app.id,
+            title: app.title,
+        })
+    }
 
 }

@@ -123,7 +123,7 @@ export class UserService {
         }
         await this.userRepository.changeEmail(id, dto);
         return new ChangeEmailUserResponseDto({email: dto.email});
-    }
+  }
 
     async changePasswordForAdmin(
         id: number,

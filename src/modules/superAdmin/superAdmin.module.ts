@@ -7,12 +7,15 @@ import { PasswordService } from 'src/feature-md/password/password.service';
 import { JwtService } from '@nestjs/jwt';
 import { ManageAppAdminsController } from 'src/api/controller/superAdmin/manageAppAdmins.controller';
 import { ManageUsersController } from 'src/api/controller/superAdmin/manageUsers.controller';
+import { ManageAppsController } from 'src/api/controller/superAdmin/manageApp.controller';
 import { AppAdminService } from 'src/api/service/appAdmin/appAdmin.service';
 import { AppAdminRepository } from 'src/db/repositories/appAdmin/repository';
 import { UserRepository } from 'src/db/repositories/user/repository';
 import { UserService } from 'src/api/service/user/user.service';
 import { AppRepository } from 'src/db/repositories/app/repository';
 import { RoleRepository } from 'src/db/repositories/role/repository';
+import { AppsService } from 'src/api/service/app/app.service';
+import { SecretService } from 'src/feature-md/secret/secret.service';
 import { User } from 'src/db/models/user/user';
 import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
 
@@ -21,6 +24,7 @@ import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
     SuperAdminAuthController,
     ManageAppAdminsController,
     ManageUsersController,
+    ManageAppsController,
   ],
   providers: [
     SuperAdminAuthService,
@@ -31,10 +35,12 @@ import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
     User,
     RoleRepository,
     AppRepository,
+    AppsService,
     SuperAdminRepository,
     SuperAdmin,
     AppAdmin,
     PasswordService,
+    SecretService,
     JwtService,
   ],})
 export class SuperAdminModule {}

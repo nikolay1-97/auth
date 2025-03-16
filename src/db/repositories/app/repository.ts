@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { App } from 'src/db/models/app/app';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
+import { ChangeTitleAppDto } from 'src/api/dto/app/admin/appChangeTitle.dto';
 
 @Injectable()
 export class AppRepository {
@@ -104,5 +105,20 @@ export class AppRepository {
       console.log(e);
       throw e;
     }
+  }
+
+  async changeTitle(id: number, dto: ChangeTitleAppDto) {
+        try {
+          await this.modelClass
+            .query()
+            .patch(dto)
+            .where({ id })
+            .returning('*')
+            .first();
+          return dto;
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
   }
 }
