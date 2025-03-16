@@ -28,7 +28,7 @@ export class ManageAppAdminsController {
 
     @ApiResponse({ status: 200, type: ChangeEmailAppAdminResponseDto })
     @Patch('app-admin/:appAdmin_id')
-    async changeTitle(
+    async changeEmail(
         @Param('appAdmin_id', ParseIntPipe) appAdmin_id: number,
         @Body() dto: ChangeEmailAppAdminDto
     ): Promise<ChangeEmailAppAdminResponseDto> {

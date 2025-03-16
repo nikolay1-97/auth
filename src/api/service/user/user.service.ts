@@ -7,6 +7,12 @@ import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateRespon
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto';
 import { ChangePasswordResponseDto } from 'src/api/dtoResponse/user/userChangePasswordResponse.dto';
 import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
+import { ChangeEmailUserDto } from 'src/api/dto/user/admin/userChangeEmail.dto';
+import { ChangeEmailUserResponseDto } from 'src/api/dtoResponse/user/admin/userChangeEmailResponse.dto';
+import { ChangePasswordUserDto } from 'src/api/dto/user/admin/userChangePassword.dto';
+import { ChangePasswordUserResponseDto } from 'src/api/dtoResponse/user/admin/userChangePasswordResponse.dto';
+import { DeleteUserResponseDto } from 'src/api/dtoResponse/user/admin/userDeleteResponse.dto';
+import { GetUsersByAppIdForAdminResponseDto } from 'src/api/dtoResponse/user/admin/userGetUsersByAppIdForAdmin.dto';
 import { plainToInstance } from 'class-transformer';
 
 
@@ -63,4 +69,55 @@ export class UserService {
   
       return plainToInstance(GetUsersByAppIdUserResponseDto, users)
   }
+
+  async getByAppIdForAdmin(
+    app_id: number,
+  ): Promise<GetUsersByAppIdForAdminResponseDto[]> {
+    const users = await this.userRepository.getByAppid(app_id);
+
+    return plainToInstance(GetUsersByAppIdForAdminResponseDto, users)
+}
+
+  async changeEmail(
+        id: number,
+        dto: ChangeEmailUserDto,
+      ): Promise<ChangeEmailUserResponseDto> {
+        const user = await this.userRepository.getById(id);
+    
+        if (!user) {
+          throw new BadRequestException('user not found');
+        }
+        const userByEmail = await this.userRepository.getByEmail(dto.email)
+        if (userByEmail) {
+            throw new BadRequestException('user already exists')
+        }
+        await this.userRepository.changeEmail(id, dto);
+        return new ChangeEmailUserResponseDto({email: dto.email});
+    }
+
+    async changePasswordForAdmin(
+        id: number,
+        dto: ChangePasswordUserDto,
+      ): Promise<ChangePasswordUserResponseDto> {
+        const user = await this.userRepository.getById(id);
+    
+        if (!user) {
+          throw new BadRequestException('user not found');
+        }
+        await this.userRepository.changePassword(id, dto.password);
+        return new ChangePasswordUserResponseDto({message: 'successfully updated'});
+    }
+
+    async delete(id: number): Promise<DeleteUserResponseDto> {
+        const user = await this.userRepository.getById(id);
+        
+        if (!user) {
+            throw new BadRequestException('user not found');
+        }
+        await this.userRepository.delete(id);
+        return new DeleteUserResponseDto({
+            id: user.id,
+            email: user.email,
+        })
+    }
 }

@@ -1,6 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { AppAdminRepository } from 'src/db/repositories/appAdmin/repository';
-import { PasswordService } from 'src/feature-md/password/password.service';
 import { CreateAppAdminDto } from 'src/api/dto/appAdmin/appAdminCreate.dto';
 import { CreateAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/appAdminCreateResponse.dto';
 import { ChangeEmailAppAdminDto } from 'src/api/dto/appAdmin/admin/appAdminChangeEmail.dto';
@@ -16,7 +15,6 @@ import { plainToInstance } from 'class-transformer';
 export class AppAdminService {
   constructor(
     private readonly appAdminRepository: AppAdminRepository,
-    private readonly passwordService: PasswordService,
   ) {}
 
 

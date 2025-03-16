@@ -3,6 +3,7 @@ import { ModelClass } from 'objection';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { PasswordService } from 'src/feature-md/password/password.service';
 import { User } from 'src/db/models/user/user';
+import { ChangeEmailUserDto } from 'src/api/dto/user/admin/userChangeEmail.dto';
 
 @Injectable()
 export class UserRepository {
@@ -78,6 +79,30 @@ export class UserRepository {
         .returning('*')
         .first();
       return true;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async changeEmail(id: number, dto: ChangeEmailUserDto) {
+        try {
+          await this.modelClass
+            .query()
+            .patch(dto)
+            .where({ id })
+            .returning('*')
+            .first();
+          return dto;
+        } catch (e) {
+          console.log(e);
+          throw e;
+        }
+  }
+
+  async delete(id: number) {
+    try {
+      await this.modelClass.query().deleteById(id);
     } catch (e) {
       console.log(e);
       throw e;
