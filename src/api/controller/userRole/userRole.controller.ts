@@ -24,27 +24,30 @@ export class UserRoleController {
      ) {}
 
     @ApiResponse({ status: 200, type: CreateUserRoleResponseDto })
-    @Post('create')
-    async register(@Body() dto: CreateUserRoleDto) {
+    @Post('apps/:app_id/create')
+    async register(@Body() dto: CreateUserRoleDto,
+    @Param('app_id', ParseIntPipe) app_id: number,
+) {
         return await this.userRoleService.create(dto)
     }
 
     @ApiResponse({ status: 200, type: DeleteUserRoleResponseDto })
-    @Delete('/users/:user_id/roles/:role_id')
+    @Delete('apps/:app_id/users/:user_id/roles/:role_id')
     async delete(
         @Param('user_id', ParseIntPipe) user_id: number,
-        @Param('role_id', ParseIntPipe) role_id: number
+        @Param('role_id', ParseIntPipe) role_id: number,
+        @Param('app_id', ParseIntPipe) app_id: number,
         ): Promise<DeleteUserRoleResponseDto> {
             return await this.userRoleService.delete(user_id, role_id);
         }
 
     @ApiResponse({ status: 200, type: [GetUserRolesResponseDto] })
-    @Get(':user_id')
+    @Get('apps/:app_id/users/:user_id')
     async getUseRoles(
+      @Param('app_id', ParseIntPipe) app_id: number,
       @Param('user_id', ParseIntPipe) user_id: number,
     ): Promise<GetUserRolesResponseDto[]> {
       return await this.userRoleService.getUserRoles(user_id);
     }
-
 
 }

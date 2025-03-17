@@ -29,7 +29,7 @@ export class UserGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     const payload = this.jwtService.decode(token.substring(7, token.length))
-    console.log(payload)
+    
     if (!payload) {
       throw new UnauthorizedException();
     }

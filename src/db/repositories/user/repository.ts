@@ -129,4 +129,24 @@ export class UserRepository {
       throw e;
     }
   }
+
+  async getByAppIdAndOwnerId(app_id: number, owner_id: number) {
+      try {
+        const users: User[] | undefined = await this.modelClass
+          .query()
+          .where('users.app_id', '=', app_id)
+          .where('owner_id', '=', owner_id)
+          .join('app', 'users.app_id', '=', 'app.id')
+          .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
+          .select(
+              'users.id',
+              'email',
+          );
+        
+        return users;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    }
 }

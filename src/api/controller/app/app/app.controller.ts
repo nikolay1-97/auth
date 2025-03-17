@@ -46,9 +46,9 @@ export class AppsController {
       }
 
       @ApiResponse({ status: 200, type: UpdateAppResponseDto })
-      @Patch(':id')
-      async changeSecret(@Param('id', ParseIntPipe) id: number): Promise<UpdateAppResponseDto> {
-        await this.appService.update(id)
+      @Patch(':app_id')
+      async changeSecret(@Param('app_id', ParseIntPipe) app_id: number): Promise<UpdateAppResponseDto> {
+        await this.appService.update(app_id)
         return new UpdateAppResponseDto({message: 'successfully updated'})
         
       }
@@ -68,10 +68,10 @@ export class AppsController {
 
       
       @ApiResponse({ status: 200, type: DeleteAppResponseDto })
-      @Delete(':id')
+      @Delete(':app_id')
       async delete(
-      @Param('id', ParseIntPipe) id: number,
+      @Param('app_id', ParseIntPipe) app_id: number,
       ): Promise<DeleteAppResponseDto> {
-        return await this.appService.delete(id);
+        return await this.appService.delete(app_id);
       }
 }

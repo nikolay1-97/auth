@@ -33,7 +33,7 @@ export class AppAdminAuthService {
     if (appAdmin) {
       const payload: {sub: number, username: string} = { sub: appAdmin.id, username: appAdmin.email };
 
-      const token: string = await this.jwtService.sign(payload, {
+      const token: string = await this.jwtService.signAsync(payload, {
         secret: this.configService.get('APP_ADMIN_SECRET'),
         expiresIn: this.configService.get('EXPIRE_JWT'),
       });

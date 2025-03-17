@@ -27,6 +27,8 @@ import { UserGuard } from 'src/api/guards/user/user.guards';
 import { UserService } from 'src/api/service/user/user.service';
 import { UserAuthService } from 'src/api/service/user/userAuth.service';
 import { JwtService } from '@nestjs/jwt';
+import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
+import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
 
 
 
@@ -86,6 +88,7 @@ export class UserController {
         throw new BadRequestException('user not found')
   }
 
+  @UseGuards(AppAdminGuard, AppOwnerGuards)
   @ApiTags('AppAdmin')
   @ApiResponse({ status: 200, type: [GetUsersByAppIdUserResponseDto] })
   @Get(':app_id')
