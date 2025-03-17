@@ -10,13 +10,13 @@ import {
 import { AppAdminService } from 'src/api/service/appAdmin/appAdmin.service';
 import { CreateAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/appAdminCreateResponse.dto';
 import { CreateAppAdminDto } from 'src/api/dto/appAdmin/appAdminCreate.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginAppAdminDto } from 'src/api/dto/appAdmin/appAdminLogin.dto';
 import { LoginAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/appAdminLoginResponse.dto';
 import { AppAdminAuthService } from 'src/api/service/appAdmin/appAdminAuth.service';
-import { StringDecoder } from 'node:string_decoder';
 
 
+@ApiTags('AppAdmin')
 @Controller('app-admins')
 export class AppAdminController {
   constructor(

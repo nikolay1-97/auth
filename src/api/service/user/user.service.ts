@@ -37,10 +37,10 @@ export class UserService {
         throw new BadRequestException('app not found')
     }
 
-    const user = await this.userRepository.getByEmail(dto.email)
+    const user = await this.userRepository.getByEmail(dto.credentials.email)
     if (!user) {
       await this.userRepository.create(app.id, dto);
-      return new CreateUserResponseDto({email: dto.email});
+      return new CreateUserResponseDto({email: dto.credentials.email});
     }
     throw new BadRequestException('user already exists');
   }

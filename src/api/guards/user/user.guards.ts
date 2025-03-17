@@ -20,11 +20,16 @@ export class UserGuard implements CanActivate {
   
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    const body = request['body']
+    if (!body) {
+        throw new UnauthorizedException();
+      }
     const token = request.headers.authorization;
     if (!token) {
       throw new UnauthorizedException();
     }
     const payload = this.jwtService.decode(token.substring(7, token.length))
+    console.log(payload)
     if (!payload) {
       throw new UnauthorizedException();
     }
@@ -32,7 +37,7 @@ export class UserGuard implements CanActivate {
     if (!user) {
       throw new UnauthorizedException();
     }
-    const app = await this.appRepository.getById(user.app_id)
+    const app = await this.appRepository.getBySecret(body['appSecret'])
     if (!app) {
       throw new UnauthorizedException();
     }

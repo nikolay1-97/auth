@@ -17,6 +17,10 @@ export class UserChangePasswordDto {
   @IsString()
   readonly password: string;
 
+  @ApiProperty()
+  @IsString()
+  readonly appSecret: string;
+
   @ApiProperty({ type: () => Data })
   readonly data: Data;
 

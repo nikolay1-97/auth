@@ -12,7 +12,9 @@ async function bootstrap() {
     .setTitle('Регистратура')
     .setDescription('онлайн регистратура')
     .setVersion('1.0')
-    .addTag('API')
+    .addTag('AppAdmin')
+    .addTag('User')
+    .addTag('SuperAdmin')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

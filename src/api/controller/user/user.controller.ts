@@ -16,7 +16,7 @@ import {
 import { Request } from 'express';
 import { CreateUserDto } from 'src/api/dto/user/userCreate.dto';
 import { CreateUserResponseDto } from 'src/api/dtoResponse/user/userCreateResponse.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginUserDto } from 'src/api/dto/user/userLogin.dto';
 import { LoginUserResponseDto } from 'src/api/dtoResponse/user/userLoginResponse.dto';
 import { UserChangePasswordDto } from 'src/api/dto/user/userChangePassword.dto'; 
@@ -38,27 +38,28 @@ export class UserController {
     private readonly jwtService: JwtService,
  ) {}
 
+  @ApiTags('User')
   @ApiResponse({ status: 201, type: CreateUserResponseDto })
   @Post('register')
   async register(
     @Body() dto: CreateUserDto,
   ): Promise<CreateUserResponseDto> {
     await this.userService.create({
-      email: dto.email,
-      password: dto.password,
+      credentials: dto.credentials,
       secret: dto.secret,
       data: dto.data,
     });
-    return new CreateUserResponseDto({email: dto.email});
+    return new CreateUserResponseDto({email: dto.credentials.email});
   }
 
+  @ApiTags('User')
   @ApiResponse({ status: 200, type: LoginUserResponseDto })
   @Post('login')
   async login(@Body() dto: LoginUserDto): Promise<LoginUserResponseDto> {
     const token = await this.authService.login(
-        dto.email,
-        dto.password,
-        dto.secret,
+        dto.credentials.email,
+        dto.credentials.password,
+        dto.appSecret,
     );
     if (token) {
       return new LoginUserResponseDto({access_token: token.access_token});
@@ -67,6 +68,7 @@ export class UserController {
   }
 
   @UseGuards(UserGuard)
+  @ApiTags('User')
   @ApiResponse({ status: 200, type: ChangePasswordResponseDto })
   @Patch()
   async changePassword(
@@ -84,12 +86,14 @@ export class UserController {
         throw new BadRequestException('user not found')
   }
 
+  @ApiTags('AppAdmin')
   @ApiResponse({ status: 200, type: [GetUsersByAppIdUserResponseDto] })
   @Get(':app_id')
   async getListByAppId(@Param('app_id', ParseIntPipe) app_id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
     return await this.userService.getByAppId(app_id);
   }
 
+  @ApiTags('AppAdmin')
   @ApiResponse({ status: 200, type: [GetUsersByAppIdAndRoleIdResponseDto] })
   @Get('apps/:app_id/roles/:role_id')
   async getUsersByAppIdAndRoleId(

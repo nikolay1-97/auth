@@ -9,17 +9,22 @@ export class Data {
     readonly answer: string;
 }
 
+export class Credentials {
+    @ApiProperty()
+    @IsString()
+    @IsEmail()
+    readonly email: string;
+  
+    @ApiProperty()
+    @MinLength(6)
+    @IsString()
+    readonly password: string;
+  }
+
 
 export class CreateUserDto {
-  @ApiProperty()
-  @IsString()
-  @IsEmail()
-  readonly email: string;
-
-  @ApiProperty()
-  @MinLength(6)
-  @IsString()
-  readonly password: string;
+  @ApiProperty({ type: () => Credentials})
+  readonly credentials: Credentials;
 
   @ApiProperty({ type: () => Data })
   readonly data: Data;

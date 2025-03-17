@@ -9,7 +9,7 @@ import {
     Param,
     ParseIntPipe,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRoleDto } from 'src/api/dto/role/roleCreate.dto';
 import { CreateRoleResponseDto } from 'src/api/dtoResponse/role/roleCreateResponse.dto';
 import { RoleService } from 'src/api/service/role/role.service';
@@ -19,6 +19,7 @@ import { DeleteRoleResponseDto } from 'src/api/dtoResponse/role/roleDelete.dto';
 import { RoleGetListByAppIdResponseDto } from 'src/api/dtoResponse/role/roleGetListByAppIdResponse.dto';
 
 
+@ApiTags('AppAdmin')
 @Controller('roles')
 export class RoleController {
     constructor(

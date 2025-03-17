@@ -9,14 +9,14 @@ import {
     Param,
     ParseIntPipe,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserRoleDto } from 'src/api/dto/userRole/userRoleCreate.dto';
 import { CreateUserRoleResponseDto } from 'src/api/dtoResponse/userRole/userRoleCreateResponse.dto';
 import { UserRoleService } from 'src/api/service/userRole/userRole.service.dto';
 import { DeleteUserRoleResponseDto } from 'src/api/dtoResponse/userRole/userRoleDeleteResponse.dto';
 import { GetUserRolesResponseDto } from 'src/api/dtoResponse/userRole/getUserRoles.dto';
 
-
+@ApiTags('AppAdmin')
 @Controller('userRoles')
 export class UserRoleController {
     constructor(

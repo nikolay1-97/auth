@@ -77,8 +77,8 @@ export class UserRepository {
       const secret_data: string = `{"question": "${dto.data.question}", "answer": "${dto.data.answer}"}`
       const data: object = {
         app_id: app_id,
-        email: dto.email,
-        password: await this.passwordService.getPasswordHash(dto.password),
+        email: dto.credentials.email,
+        password: await this.passwordService.getPasswordHash(dto.credentials.password),
         data: secret_data,
       }
       await this.modelClass.query().insert(data);

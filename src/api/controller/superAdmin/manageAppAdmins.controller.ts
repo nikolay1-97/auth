@@ -9,7 +9,7 @@ import {
     Param,
     ParseIntPipe,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppAdminService } from 'src/api/service/appAdmin/appAdmin.service';
 import { ChangeEmailAppAdminDto } from 'src/api/dto/appAdmin/admin/appAdminChangeEmail.dto';
 import { ChangeEmailAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminChangeEmailResponse.dto';
@@ -18,7 +18,7 @@ import { ChangePasswordAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/
 import { DeleteAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminDelete.response.dto';
 import { GetAppAdminsResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminGetList.dto';
 
-
+@ApiTags('SuperAdmin')
 @Controller('super-admin')
 export class ManageAppAdminsController {
     constructor(

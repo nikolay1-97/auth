@@ -7,7 +7,7 @@ import {
 import { SuperAdminAuthService } from 'src/api/service/superAdmin/superAdminAuth.service';
 import { LoginSuperAdminDto } from 'src/api/dto/superAdmin/superAdminLogin.dto';
 import { LoginSuperAdminResponseDto } from 'src/api/dtoResponse/superAdmin/superAdminLoginResponse.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
 @Controller('super-admin')
@@ -16,6 +16,7 @@ export class SuperAdminAuthController {
     private readonly superAdminAuthService: SuperAdminAuthService,
  ) {}
 
+  @ApiTags('SuperAdmin')
   @ApiResponse({ status: 200, type: LoginSuperAdminResponseDto })
   @Post('login')
   async login(@Body() dto: LoginSuperAdminDto): Promise<LoginSuperAdminResponseDto> {

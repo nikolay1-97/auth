@@ -12,7 +12,7 @@ import {
     Param,
     ParseIntPipe,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SecretService } from 'src/feature-md/secret/secret.service';
 import { AppsService } from 'src/api/service/app/app.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
@@ -23,7 +23,7 @@ import { DeleteAppResponseDto } from 'src/api/dtoResponse/app/appDeleteResponse.
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
-
+@ApiTags('AppAdmin')
 @Controller('apps')
 export class AppsController {
     constructor(private readonly appService: AppsService,
