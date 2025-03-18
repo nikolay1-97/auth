@@ -1,5 +1,5 @@
 import { AuthGuard } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadGatewayException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AppRepository } from 'src/db/repositories/app/repository';
 import { RoleRepository } from 'src/db/repositories/role/repository';
@@ -20,6 +20,7 @@ export class RoleGuards implements CanActivate {
     async canActivate(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest();
         const app_id = request['params']['app_id']
+        const role_id = request['params']['role_id']
         
         const token = request.headers.authorization;
         if (!token) {
@@ -33,7 +34,13 @@ export class RoleGuards implements CanActivate {
         
         const roles = await this.roleRepositrory.getByAppIdAndOwnerId(app_id, payload.sub)
         if (roles.length == 0) {
-            throw new UnauthorizedException();
+            throw new BadRequestException('roles not found');
+        }
+
+        for (let count=0; count <= roles.length-1; count++) {
+            if (roles[count].id != role_id) {
+                throw new BadRequestException('role not found');
+            }
         }
 
         return true;

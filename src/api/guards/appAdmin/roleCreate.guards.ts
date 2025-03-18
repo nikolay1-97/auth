@@ -1,6 +1,7 @@
+import { AuthGuard } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository } from 'src/db/repositories/user/repository';
+import { AppRepository } from 'src/db/repositories/app/repository';
 import {
     ExecutionContext,
     CanActivate,
@@ -9,15 +10,14 @@ import {
 
 
 @Injectable()
-export class AppAdminUsersGuards implements CanActivate {
+export class RoleCreateGuards implements CanActivate {
     constructor(
         private jwtService: JwtService,
-        private readonly userRepositrory: UserRepository,
+        private appRepository: AppRepository,
     ) {}
     async canActivate(context: ExecutionContext) {
         const request = context.switchToHttp().getRequest();
-        const app_id = request['params']['app_id']
-        const user_id = request['params']['user_id']
+        const app_id = request['body'].app_id
         
         const token = request.headers.authorization;
         if (!token) {
@@ -29,14 +29,13 @@ export class AppAdminUsersGuards implements CanActivate {
             throw new UnauthorizedException();
         }
         
-        const users = await this.userRepositrory.getByAppIdAndOwnerId(app_id, payload.sub)
-        if (users.length == 0) {
-            throw new BadRequestException('users not found');
+        const apps = await this.appRepository.getByOwnerId(payload.sub)
+        if (apps.length == 0) {
+            throw new BadRequestException('app not found');
         }
-
-        for (let count=0; count <= users.length-1; count++) {
-            if (users[count].id != user_id) {
-                throw new BadRequestException('user not found');
+        for (let count=0; count <= apps.length-1; count++) {
+            if (apps[count].id != app_id) {
+                throw new BadRequestException('app not found');
             }
         }
 

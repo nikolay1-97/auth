@@ -140,7 +140,7 @@ export class UserRepository {
           .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
           .select(
               'users.id',
-              'email',
+              'users.email',
           );
         
         return users;

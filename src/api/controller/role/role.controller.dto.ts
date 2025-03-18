@@ -20,6 +20,8 @@ import { DeleteRoleResponseDto } from 'src/api/dtoResponse/role/roleDelete.dto';
 import { RoleGetListByAppIdResponseDto } from 'src/api/dtoResponse/role/roleGetListByAppIdResponse.dto';
 import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
 import { RoleGuards } from 'src/api/guards/appAdmin/role.guards';
+import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
+import { RoleCreateGuards } from 'src/api/guards/appAdmin/roleCreate.guards';
 
 
 @ApiTags('AppAdmin')
@@ -29,13 +31,14 @@ export class RoleController {
         private readonly roleService: RoleService,
      ) {}
 
+    @UseGuards(AppAdminGuard, RoleCreateGuards)
     @ApiResponse({ status: 200, type: CreateRoleResponseDto })
-    @Post('apps/:app_id/create')
-    async register(@Body() dto: CreateRoleDto, @Param('app_id', ParseIntPipe) app_id: number,) {
+    @Post('create')
+    async register(@Body() dto: CreateRoleDto) {
         return await this.roleService.create(dto)
     }
 
-    @UseGuards(RoleGuards)
+    @UseGuards(AppAdminGuard, RoleGuards)
     @ApiResponse({ status: 200, type: RoleChangeTitleResponseDto })
     @Patch('apps/:app_id/roles/:role_id')
     async changeTitle(

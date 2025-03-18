@@ -8,6 +8,7 @@ import {
     Req,
     Param,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserRoleDto } from 'src/api/dto/userRole/userRoleCreate.dto';
@@ -15,6 +16,9 @@ import { CreateUserRoleResponseDto } from 'src/api/dtoResponse/userRole/userRole
 import { UserRoleService } from 'src/api/service/userRole/userRole.service.dto';
 import { DeleteUserRoleResponseDto } from 'src/api/dtoResponse/userRole/userRoleDeleteResponse.dto';
 import { GetUserRolesResponseDto } from 'src/api/dtoResponse/userRole/getUserRoles.dto';
+import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
+import { UserRoleCreateGuards } from 'src/api/guards/appAdmin/userRoleCreate.guards';
+import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
 
 @ApiTags('AppAdmin')
 @Controller('userRoles')
@@ -24,6 +28,7 @@ export class UserRoleController {
      ) {}
 
     @ApiResponse({ status: 200, type: CreateUserRoleResponseDto })
+    @UseGuards(AppAdminGuard, AppOwnerGuards, UserRoleCreateGuards)
     @Post('apps/:app_id/create')
     async register(@Body() dto: CreateUserRoleDto,
     @Param('app_id', ParseIntPipe) app_id: number,

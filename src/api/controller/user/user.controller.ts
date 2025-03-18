@@ -29,6 +29,7 @@ import { UserAuthService } from 'src/api/service/user/userAuth.service';
 import { JwtService } from '@nestjs/jwt';
 import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
 import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
+import { RoleGuards } from 'src/api/guards/appAdmin/role.guards';
 
 
 
@@ -96,6 +97,7 @@ export class UserController {
     return await this.userService.getByAppId(app_id);
   }
 
+  @UseGuards(AppAdminGuard, AppOwnerGuards, RoleGuards)
   @ApiTags('AppAdmin')
   @ApiResponse({ status: 200, type: [GetUsersByAppIdAndRoleIdResponseDto] })
   @Get('apps/:app_id/roles/:role_id')

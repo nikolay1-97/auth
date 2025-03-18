@@ -35,7 +35,7 @@ export class AppOwnerGuards implements CanActivate {
         }
         for (let count=0; count <= apps.length-1; count++) {
             if (apps[count].id != app_id) {
-                throw new UnauthorizedException();
+                throw new BadRequestException('app not found');
             }
         }
 

@@ -6,6 +6,8 @@ import { UserRepository } from 'src/db/repositories/user/repository';
 import { UserRoleService } from 'src/api/service/userRole/userRole.service.dto';
 import { PasswordService } from 'src/feature-md/password/password.service';
 import { UserRole } from 'src/db/models/userRole/userRole';
+import { JwtService } from '@nestjs/jwt';
+import { AppRepository } from 'src/db/repositories/app/repository';
 
 @Module({
     controllers: [
@@ -18,6 +20,8 @@ import { UserRole } from 'src/db/models/userRole/userRole';
         UserRepository,
         UserRole,
         PasswordService,
+        JwtService,
+        AppRepository,
       ],
 })
 export class UserRoleModule {}
