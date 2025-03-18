@@ -24,6 +24,7 @@ import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
 import { RoleCreateGuards } from 'src/api/guards/appAdmin/roleCreate.guards';
 
 
+@UseGuards(AppAdminGuard)
 @ApiTags('AppAdmin')
 @Controller('roles')
 export class RoleController {
@@ -31,14 +32,14 @@ export class RoleController {
         private readonly roleService: RoleService,
      ) {}
 
-    @UseGuards(AppAdminGuard, RoleCreateGuards)
+    @UseGuards(RoleCreateGuards)
     @ApiResponse({ status: 200, type: CreateRoleResponseDto })
     @Post('create')
     async register(@Body() dto: CreateRoleDto) {
         return await this.roleService.create(dto)
     }
 
-    @UseGuards(AppAdminGuard, RoleGuards)
+    @UseGuards(AppOwnerGuards, RoleGuards)
     @ApiResponse({ status: 200, type: RoleChangeTitleResponseDto })
     @Patch('apps/:app_id/roles/:role_id')
     async changeTitle(
@@ -50,6 +51,7 @@ export class RoleController {
             
     }
 
+    @UseGuards(AppOwnerGuards, RoleGuards)
     @ApiResponse({ status: 200, type: DeleteRoleResponseDto })
     @Delete('apps/:app_id/role/:role_id')
     async delete(

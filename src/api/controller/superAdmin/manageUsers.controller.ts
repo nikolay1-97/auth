@@ -8,6 +8,7 @@ import {
     Req,
     Param,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from 'src/api/service/user/user.service';
@@ -18,7 +19,10 @@ import { ChangePasswordUserResponseDto } from 'src/api/dtoResponse/user/admin/us
 import { DeleteUserResponseDto } from 'src/api/dtoResponse/user/admin/userDeleteResponse.dto';
 import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGetByAppIdResponse.dto';
 import { GetUsersByAppIdForAdminResponseDto } from 'src/api/dtoResponse/user/admin/userGetUsersByAppIdForAdmin.dto';
+import { SuperAdminGuard } from 'src/api/guards/superAdmin/superAdminGuard';
 
+
+@UseGuards(SuperAdminGuard)
 @ApiTags('SuperAdmin')
 @Controller('super-admin-users')
 export class ManageUsersController {

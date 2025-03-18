@@ -2,7 +2,6 @@ import {
     Controller,
     UseInterceptors,
     SerializeOptions,
-    ClassSerializerInterceptor,
     Get,
     Post,
     Patch,
@@ -11,9 +10,9 @@ import {
     Req,
     Param,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { SecretService } from 'src/feature-md/secret/secret.service';
 import { AppsService } from 'src/api/service/app/app.service';
 import { CreateAppDto } from 'src/api/dto/app/appCreate.dto';
 import { CreateAppResponseDto } from 'src/api/dtoResponse/app/appCreateResponse.dto';
@@ -22,7 +21,11 @@ import { GetListAppResponseDto } from 'src/api/dtoResponse/app/appGetListByOwner
 import { DeleteAppResponseDto } from 'src/api/dtoResponse/app/appDeleteResponse.dto';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
+import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
 
+
+@UseGuards(AppAdminGuard)
 @ApiTags('AppAdmin')
 @Controller('apps')
 export class AppsController {
@@ -45,6 +48,7 @@ export class AppsController {
         }
       }
 
+      @UseGuards(AppOwnerGuards)
       @ApiResponse({ status: 200, type: UpdateAppResponseDto })
       @Patch(':app_id')
       async changeSecret(@Param('app_id', ParseIntPipe) app_id: number): Promise<UpdateAppResponseDto> {
@@ -66,7 +70,7 @@ export class AppsController {
         }
       }
 
-      
+      @UseGuards(AppOwnerGuards)
       @ApiResponse({ status: 200, type: DeleteAppResponseDto })
       @Delete(':app_id')
       async delete(

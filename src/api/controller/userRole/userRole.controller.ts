@@ -19,7 +19,10 @@ import { GetUserRolesResponseDto } from 'src/api/dtoResponse/userRole/getUserRol
 import { AppAdminGuard } from 'src/api/guards/appAdmin/appAdmin.guards';
 import { UserRoleCreateGuards } from 'src/api/guards/appAdmin/userRoleCreate.guards';
 import { AppOwnerGuards } from 'src/api/guards/appAdmin/appOwner.guards';
+import { AppAdminUsersGuards } from 'src/api/guards/appAdmin/appAdminUsers.guards';
+import { RoleGuards } from 'src/api/guards/appAdmin/role.guards';
 
+@UseGuards(AppAdminGuard)
 @ApiTags('AppAdmin')
 @Controller('userRoles')
 export class UserRoleController {
@@ -28,7 +31,7 @@ export class UserRoleController {
      ) {}
 
     @ApiResponse({ status: 200, type: CreateUserRoleResponseDto })
-    @UseGuards(AppAdminGuard, AppOwnerGuards, UserRoleCreateGuards)
+    @UseGuards(AppOwnerGuards, UserRoleCreateGuards)
     @Post('apps/:app_id/create')
     async register(@Body() dto: CreateUserRoleDto,
     @Param('app_id', ParseIntPipe) app_id: number,
@@ -36,6 +39,7 @@ export class UserRoleController {
         return await this.userRoleService.create(dto)
     }
 
+    @UseGuards(AppOwnerGuards, AppAdminUsersGuards, RoleGuards)
     @ApiResponse({ status: 200, type: DeleteUserRoleResponseDto })
     @Delete('apps/:app_id/users/:user_id/roles/:role_id')
     async delete(
@@ -46,6 +50,7 @@ export class UserRoleController {
             return await this.userRoleService.delete(user_id, role_id);
         }
 
+    @UseGuards(AppOwnerGuards, AppAdminUsersGuards)
     @ApiResponse({ status: 200, type: [GetUserRolesResponseDto] })
     @Get('apps/:app_id/users/:user_id')
     async getUseRoles(

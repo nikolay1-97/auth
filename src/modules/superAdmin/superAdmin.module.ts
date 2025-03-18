@@ -18,6 +18,7 @@ import { AppsService } from 'src/api/service/app/app.service';
 import { SecretService } from 'src/feature-md/secret/secret.service';
 import { User } from 'src/db/models/user/user';
 import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
+import { SuperAdminJwtStrategy } from 'src/feature-md/Strategy/superAdmin/superAdminStrategy';
 
 @Module({
     controllers: [
@@ -42,5 +43,6 @@ import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
     PasswordService,
     SecretService,
     JwtService,
+    SuperAdminJwtStrategy,
   ],})
 export class SuperAdminModule {}

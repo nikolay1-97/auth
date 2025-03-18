@@ -8,6 +8,7 @@ import {
     Req,
     Param,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppAdminService } from 'src/api/service/appAdmin/appAdmin.service';
@@ -17,14 +18,16 @@ import { ChangePasswordAppAdminDto } from 'src/api/dto/appAdmin/admin/appAdminCh
 import { ChangePasswordAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminChangePasswordResponse.dto';
 import { DeleteAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminDelete.response.dto';
 import { GetAppAdminsResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminGetList.dto';
+import { SuperAdminGuard } from 'src/api/guards/superAdmin/superAdminGuard';
 
+
+@UseGuards(SuperAdminGuard)
 @ApiTags('SuperAdmin')
 @Controller('super-admin')
 export class ManageAppAdminsController {
     constructor(
         private readonly appAdminService: AppAdminService,
      ) {}
-
 
     @ApiResponse({ status: 200, type: ChangeEmailAppAdminResponseDto })
     @Patch('app-admin/:appAdmin_id')

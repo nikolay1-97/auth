@@ -33,6 +33,11 @@ export class UserRoleService {
       throw new BadRequestException('role not found')
     }
 
+    const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(dto.user_id, dto.role_id)
+    if (userRole) {
+        throw new BadRequestException('row of userRole already exists')
+    }
+
     await this.userRoleRepository.create(dto)
     return new CreateUserRoleResponseDto({user_id: dto.user_id, role_id: dto.role_id})
   
@@ -49,6 +54,11 @@ export class UserRoleService {
 
         if(!role) {
             throw new BadRequestException('role not found')
+        }
+
+        const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(user_id, role_id)
+        if (!userRole) {
+            throw new BadRequestException('row of userRole not found')
         }
 
         await this.userRoleRepository.delete(user_id, role_id);

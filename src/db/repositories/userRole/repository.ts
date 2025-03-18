@@ -48,6 +48,20 @@ export class UserRoleRepository {
     }
   }
 
+  async getRowByUserIdAndRoleId(user_id: number, role_id: number) {
+    try {
+        const userRoles: UserRole[] | undefined = await this.modelClass
+        .query()
+        .where('user_id', '=', user_id)
+        .where('role_id', '=', role_id)
+        .select('*');
+        return userRoles[0];
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   
 
 }

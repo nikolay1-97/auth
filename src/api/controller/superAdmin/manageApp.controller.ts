@@ -8,6 +8,7 @@ import {
     Req,
     Param,
     ParseIntPipe,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppsService } from 'src/api/service/app/app.service';
@@ -16,7 +17,10 @@ import { ChangeTitleAppDto } from 'src/api/dto/app/admin/appChangeTitle.dto';
 import { ChangeTitleAppResponseDto } from 'src/api/dtoResponse/app/admin/appChangeTitleResponse.dto';
 import { DeleteAppForAdminResponseDto } from 'src/api/dtoResponse/app/admin/appDeleteForAdminResponse.dto';
 import { GetListAppByOwnerIdForAdminResponseDto } from 'src/api/dtoResponse/app/admin/appGetListByOwnerIdForAdminResponse.dto';
+import { SuperAdminGuard } from 'src/api/guards/superAdmin/superAdminGuard';
 
+
+@UseGuards(SuperAdminGuard)
 @ApiTags('SuperAdmin')
 @Controller('super-admin-app')
 export class ManageAppsController {
