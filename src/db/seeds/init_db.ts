@@ -24,6 +24,10 @@ export async function seed(knex: Knex): Promise<void> {
         email: 'appAdmin2@mail.ru',
         password: await bcrypt.hash('qwerty', 10),
     }]);
+    await knex("app_admin").insert([{
+        email: 'appAdmin3@mail.ru',
+        password: await bcrypt.hash('qwerty', 10),
+    }]);
     await knex("app").insert([{
         owner_id: 1,
         secret: 'qwertyuiop',
@@ -33,6 +37,11 @@ export async function seed(knex: Knex): Promise<void> {
         owner_id: 2,
         secret: 'qwertyuiopuihoih',
         title: 'app2',
+    }]);
+    await knex("app").insert([{
+        owner_id: 2,
+        secret: 'qwertyuiopuihrjnfwefiowek',
+        title: 'app3',
     }]);
     await knex("users").insert([{
         app_id: 1,
@@ -46,12 +55,22 @@ export async function seed(knex: Knex): Promise<void> {
         password: await bcrypt.hash('qwerty', 10),
         data: {"question": "string1",  "answer": "string1"},
     }]);
+    await knex("users").insert([{
+        app_id: 2,
+        email: 'user3@mail.ru',
+        password: await bcrypt.hash('qwerty', 10),
+        data: {"question": "string1",  "answer": "string1"},
+    }]);
     await knex("roles").insert([{
         title: 'role1',
         app_id: 1,
     }]);
     await knex("roles").insert([{
         title: 'role2',
+        app_id: 2,
+    }]);
+    await knex("roles").insert([{
+        title: 'role3',
         app_id: 2,
     }]);
     await knex("user_role").insert([{

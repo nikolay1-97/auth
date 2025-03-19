@@ -96,7 +96,7 @@ describe('UserController (e2e)', () => {
         return request(app.getHttpServer()).post('/users/register')
         .send({
             "credentials": {
-                "email": "user3@mail.ru",
+                "email": "user4@mail.ru",
                 "password": "qwerty"
             },
             "data": {
@@ -106,7 +106,7 @@ describe('UserController (e2e)', () => {
             "secret": "qwertyuiop"
           })
         .expect(201).expect(
-            { email: "user3@mail.ru" }
+            { email: "user4@mail.ru" }
         )
     }),
     it('/users/register (POST)', async() => {
@@ -132,7 +132,7 @@ describe('UserController (e2e)', () => {
         return request(app.getHttpServer()).post('/users/register')
         .send({
             "credentials": {
-                "email": "user3@mail.ru",
+                "email": "user4@mail.ru",
                 "password": "qwerty"
             },
             "data": {
