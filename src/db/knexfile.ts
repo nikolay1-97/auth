@@ -10,13 +10,16 @@ import conf from '../configuration/index'
 module.exports = {
   development: {
     client: 'pg',
-    connection: conf().db_url,
+    connection: "postgres://postgres:1234@localhost/pw_task2",
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
       tableName: 'knex_migrations',
+    },
+    seeds: {
+      directory: './seeds',
     },
     ...knexSnakeCaseMappers(),
   },
