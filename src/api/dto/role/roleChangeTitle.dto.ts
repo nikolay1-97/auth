@@ -5,5 +5,4 @@ export class RoleChangeTitleDto {
   @ApiProperty()
   @IsString()
   readonly title: string;
-
 }

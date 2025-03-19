@@ -9,9 +9,6 @@ import { DeleteRoleResponseDto } from 'src/api/dtoResponse/role/roleDelete.dto';
 import { RoleGetListByAppIdResponseDto } from 'src/api/dtoResponse/role/roleGetListByAppIdResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
-
-
-
 @Injectable()
 export class RoleService {
   constructor(
@@ -19,19 +16,19 @@ export class RoleService {
     private readonly appRepository: AppRepository,
   ) {}
 
-  async create(
-    dto: CreateRoleDto,
-  ): Promise<CreateRoleResponseDto> {
-    const app = await this.appRepository.getById(dto.app_id)
+  async create(dto: CreateRoleDto): Promise<CreateRoleResponseDto> {
+    const app = await this.appRepository.getById(dto.app_id);
     if (!app) {
-        throw new BadRequestException('app not found')
+      throw new BadRequestException('app not found');
     }
-    const role =
-      await this.roleRepository.getByTitle(dto.title);
+    const role = await this.roleRepository.getByTitle(dto.title);
 
     if (!role) {
       await this.roleRepository.create(dto);
-      return new CreateRoleResponseDto({title: dto.title, app_id: dto.app_id});
+      return new CreateRoleResponseDto({
+        title: dto.title,
+        app_id: dto.app_id,
+      });
     }
     throw new BadRequestException('role already exists');
   }
@@ -45,36 +42,35 @@ export class RoleService {
     if (!role) {
       throw new BadRequestException('role not found');
     }
-    const roleByTitle = await this.roleRepository.getByTitle(dto.title)
+    const roleByTitle = await this.roleRepository.getByTitle(dto.title);
     if (roleByTitle) {
-        throw new BadRequestException('role already exists')
+      throw new BadRequestException('role already exists');
     }
     await this.roleRepository.changeTitle(id, dto);
-    return new RoleChangeTitleResponseDto({newTitle: dto.title});
+    return new RoleChangeTitleResponseDto({ newTitle: dto.title });
   }
 
   async delete(id: number): Promise<DeleteRoleResponseDto> {
-      const role = await this.roleRepository.getById(id);
-  
-      if (!role) {
-        throw new BadRequestException('role not found');
-      }
-      await this.roleRepository.delete(id);
-      return new DeleteRoleResponseDto({
-        id: role.id,
-        app_id: role.app_id,
-        title: role.title,
-      })
+    const role = await this.roleRepository.getById(id);
+
+    if (!role) {
+      throw new BadRequestException('role not found');
+    }
+    await this.roleRepository.delete(id);
+    return new DeleteRoleResponseDto({
+      id: role.id,
+      app_id: role.app_id,
+      title: role.title,
+    });
   }
 
   async getListByAppId(id: number): Promise<RoleGetListByAppIdResponseDto[]> {
-    const app = await this.appRepository.getById(id)
+    const app = await this.appRepository.getById(id);
     if (!app) {
-        throw new BadRequestException('app not found')
+      throw new BadRequestException('app not found');
     }
     const roles = await this.roleRepository.getByAppId(id);
 
-    return plainToInstance(RoleGetListByAppIdResponseDto, roles)
+    return plainToInstance(RoleGetListByAppIdResponseDto, roles);
   }
-
 }

@@ -9,17 +9,15 @@ import { JwtService } from '@nestjs/jwt';
 import { App } from 'src/db/models/app/app';
 
 @Module({
-    controllers: [
-        AppsController,
-      ],
-      providers: [
-        SecretService,
-        AppRepository,
-        AppsService,
-        AppAdminRepository,
-        PasswordService,
-        JwtService,
-        App,
-      ],
+  controllers: [AppsController],
+  providers: [
+    SecretService,
+    AppRepository,
+    AppsService,
+    AppAdminRepository,
+    PasswordService,
+    JwtService,
+    App,
+  ],
 })
 export class AppsModule {}

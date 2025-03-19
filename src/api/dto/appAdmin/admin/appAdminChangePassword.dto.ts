@@ -6,5 +6,4 @@ export class ChangePasswordAppAdminDto {
   @MinLength(6)
   @IsString()
   readonly password: string;
-
 }

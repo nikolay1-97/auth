@@ -7,14 +7,14 @@ import { ChangeEmailUserDto } from 'src/api/dto/user/admin/userChangeEmail.dto';
 
 @Injectable()
 export class UserRepository {
-  constructor(@Inject('User') private modelClass: ModelClass<User>,
-              private readonly passwordService: PasswordService) {}
+  constructor(
+    @Inject('User') private modelClass: ModelClass<User>,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async getById(id: number) {
     try {
-      const user: User | undefined = await this.modelClass
-        .query()
-        .findById(id);
+      const user: User | undefined = await this.modelClass.query().findById(id);
 
       return user;
     } catch (e) {
@@ -29,7 +29,7 @@ export class UserRepository {
         .query()
         .select('*')
         .where('email', '=', email);
-      
+
       return user[0];
     } catch (e) {
       console.log(e);
@@ -43,7 +43,7 @@ export class UserRepository {
         .query()
         .select('*')
         .where('app_id', '=', app_id);
-      
+
       return user;
     } catch (e) {
       console.log(e);
@@ -52,35 +52,32 @@ export class UserRepository {
   }
 
   async getByAppIdAndRoleId(app_id: number, role_id: number) {
-      try {
-          const users: User[] | undefined = await this.modelClass
-          .query()
-          .where('app.id', '=', app_id)
-          .where('role_id', '=', role_id)
-          .join('user_role', 'user_id', '=', 'users.id')
-          .join('app', 'app.id', '=', 'users.app_id')
-          .select(
-            'users.id',
-            'email',
-            'users.created_at',
-            'users.updated_at',
-            );
-          return users;
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+    try {
+      const users: User[] | undefined = await this.modelClass
+        .query()
+        .where('app.id', '=', app_id)
+        .where('role_id', '=', role_id)
+        .join('user_role', 'user_id', '=', 'users.id')
+        .join('app', 'app.id', '=', 'users.app_id')
+        .select('users.id', 'email', 'users.created_at', 'users.updated_at');
+      return users;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 
   async create(app_id: number, dto: CreateUserDto) {
     try {
-      const secret_data: string = `{"question": "${dto.data.question}", "answer": "${dto.data.answer}"}`
+      const secret_data: string = `{"question": "${dto.data.question}", "answer": "${dto.data.answer}"}`;
       const data: object = {
         app_id: app_id,
         email: dto.credentials.email,
-        password: await this.passwordService.getPasswordHash(dto.credentials.password),
+        password: await this.passwordService.getPasswordHash(
+          dto.credentials.password,
+        ),
         data: secret_data,
-      }
+      };
       await this.modelClass.query().insert(data);
       return dto;
     } catch (e) {
@@ -92,7 +89,7 @@ export class UserRepository {
   async changePassword(id: number, password: string) {
     try {
       const newPassword = await this.passwordService.getPasswordHash(password);
-      const data: {password: string} = {password: newPassword};
+      const data: { password: string } = { password: newPassword };
       await this.modelClass
         .query()
         .patch(data)
@@ -107,18 +104,18 @@ export class UserRepository {
   }
 
   async changeEmail(id: number, dto: ChangeEmailUserDto) {
-        try {
-          await this.modelClass
-            .query()
-            .patch(dto)
-            .where({ id })
-            .returning('*')
-            .first();
-          return dto;
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
+    try {
+      await this.modelClass
+        .query()
+        .patch(dto)
+        .where({ id })
+        .returning('*')
+        .first();
+      return dto;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 
   async delete(id: number) {
@@ -131,22 +128,19 @@ export class UserRepository {
   }
 
   async getByAppIdAndOwnerId(app_id: number, owner_id: number) {
-      try {
-        const users: User[] | undefined = await this.modelClass
-          .query()
-          .where('users.app_id', '=', app_id)
-          .where('owner_id', '=', owner_id)
-          .join('app', 'users.app_id', '=', 'app.id')
-          .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
-          .select(
-              'users.id',
-              'users.email',
-          );
-        
-        return users;
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+    try {
+      const users: User[] | undefined = await this.modelClass
+        .query()
+        .where('users.app_id', '=', app_id)
+        .where('owner_id', '=', owner_id)
+        .join('app', 'users.app_id', '=', 'app.id')
+        .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
+        .select('users.id', 'users.email');
+
+      return users;
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
+  }
 }

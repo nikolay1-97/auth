@@ -31,7 +31,10 @@ export class SuperAdminAuthService {
   async login(email: string, password: string) {
     const superAdmin = await this.validateUser(email, password);
     if (superAdmin) {
-      const payload: {sub: number, username: string} = { sub: superAdmin.id, username: superAdmin.email };
+      const payload: { sub: number; username: string } = {
+        sub: superAdmin.id,
+        username: superAdmin.email,
+      };
 
       const token: string = await this.jwtService.sign(payload, {
         secret: this.configService.get('SUPER_ADMIN_SECRET'),

@@ -17,7 +17,6 @@ import { GetUsersByAppIdForAdminResponseDto } from 'src/api/dtoResponse/user/adm
 import { GetUsersByAppIdAndRoleIdResponseDto } from 'src/api/dtoResponse/user/userGetUsersByAppIdAndRoleIdResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
-
 @Injectable()
 export class UserService {
   constructor(
@@ -27,20 +26,16 @@ export class UserService {
     private readonly passwordService: PasswordService,
   ) {}
 
-
-  async create(
-    dto: CreateUserDto,
-  ): Promise<CreateUserResponseDto> {
-    const app =
-      await this.appRepository.getBySecret(dto.secret);
+  async create(dto: CreateUserDto): Promise<CreateUserResponseDto> {
+    const app = await this.appRepository.getBySecret(dto.secret);
     if (!app) {
-        throw new BadRequestException('app not found')
+      throw new BadRequestException('app not found');
     }
 
-    const user = await this.userRepository.getByEmail(dto.credentials.email)
+    const user = await this.userRepository.getByEmail(dto.credentials.email);
     if (!user) {
       await this.userRepository.create(app.id, dto);
-      return new CreateUserResponseDto({email: dto.credentials.email});
+      return new CreateUserResponseDto({ email: dto.credentials.email });
     }
     throw new BadRequestException('user already exists');
   }
@@ -49,105 +44,106 @@ export class UserService {
     id: number,
     dto: UserChangePasswordDto,
   ): Promise<ChangePasswordResponseDto> {
-    const user =
-      await this.userRepository.getById(id);
+    const user = await this.userRepository.getById(id);
     if (!user) {
-        throw new BadRequestException('user not found')
+      throw new BadRequestException('user not found');
     }
     const qst: string = user.data.question;
     const answer: string = user.data.answer;
 
     if (qst != dto.data.question || answer != dto.data.answer) {
-        throw new BadRequestException('incorrect data')
+      throw new BadRequestException('incorrect data');
     }
-    await this.userRepository.changePassword(id, dto.password)
-    return new ChangePasswordResponseDto({message: 'successfully updated'})
-
+    await this.userRepository.changePassword(id, dto.password);
+    return new ChangePasswordResponseDto({ message: 'successfully updated' });
   }
 
-  async getByAppId(
-      app_id: number,
-    ): Promise<GetUsersByAppIdUserResponseDto[]> {
-      const app = await this.appRepository.getById(app_id)
-      if (!app) {
-        throw new BadRequestException('app not found')
-      }
-      const users = await this.userRepository.getByAppid(app_id);
-  
-      return plainToInstance(GetUsersByAppIdUserResponseDto, users)
+  async getByAppId(app_id: number): Promise<GetUsersByAppIdUserResponseDto[]> {
+    const app = await this.appRepository.getById(app_id);
+    if (!app) {
+      throw new BadRequestException('app not found');
+    }
+    const users = await this.userRepository.getByAppid(app_id);
+
+    return plainToInstance(GetUsersByAppIdUserResponseDto, users);
   }
 
   async getByAppIdForAdmin(
     app_id: number,
   ): Promise<GetUsersByAppIdForAdminResponseDto[]> {
-    const app = await this.appRepository.getById(app_id)
+    const app = await this.appRepository.getById(app_id);
     if (!app) {
-      throw new BadRequestException('app not found')
+      throw new BadRequestException('app not found');
     }
     const users = await this.userRepository.getByAppid(app_id);
 
-    return plainToInstance(GetUsersByAppIdForAdminResponseDto, users)
+    return plainToInstance(GetUsersByAppIdForAdminResponseDto, users);
   }
 
   async getByAppIdAndRoleId(
     app_id: number,
     role_id: number,
   ): Promise<GetUsersByAppIdAndRoleIdResponseDto[]> {
-    const app = await this.appRepository.getById(app_id)
+    const app = await this.appRepository.getById(app_id);
     if (!app) {
-      throw new BadRequestException('app not found')
+      throw new BadRequestException('app not found');
     }
 
-    const role = await this.roleRepository.getById(role_id)
+    const role = await this.roleRepository.getById(role_id);
     if (!role) {
-        throw new BadRequestException('role not found')
+      throw new BadRequestException('role not found');
     }
 
-    const users = await this.userRepository.getByAppIdAndRoleId(app_id, role_id);
+    const users = await this.userRepository.getByAppIdAndRoleId(
+      app_id,
+      role_id,
+    );
 
-    return plainToInstance(GetUsersByAppIdAndRoleIdResponseDto, users)
-}
-
-  async changeEmail(
-        id: number,
-        dto: ChangeEmailUserDto,
-      ): Promise<ChangeEmailUserResponseDto> {
-        const user = await this.userRepository.getById(id);
-    
-        if (!user) {
-          throw new BadRequestException('user not found');
-        }
-        const userByEmail = await this.userRepository.getByEmail(dto.email)
-        if (userByEmail) {
-            throw new BadRequestException('user already exists')
-        }
-        await this.userRepository.changeEmail(id, dto);
-        return new ChangeEmailUserResponseDto({email: dto.email});
+    return plainToInstance(GetUsersByAppIdAndRoleIdResponseDto, users);
   }
 
-    async changePasswordForAdmin(
-        id: number,
-        dto: ChangePasswordUserDto,
-      ): Promise<ChangePasswordUserResponseDto> {
-        const user = await this.userRepository.getById(id);
-    
-        if (!user) {
-          throw new BadRequestException('user not found');
-        }
-        await this.userRepository.changePassword(id, dto.password);
-        return new ChangePasswordUserResponseDto({message: 'successfully updated'});
-    }
+  async changeEmail(
+    id: number,
+    dto: ChangeEmailUserDto,
+  ): Promise<ChangeEmailUserResponseDto> {
+    const user = await this.userRepository.getById(id);
 
-    async delete(id: number): Promise<DeleteUserResponseDto> {
-        const user = await this.userRepository.getById(id);
-        
-        if (!user) {
-            throw new BadRequestException('user not found');
-        }
-        await this.userRepository.delete(id);
-        return new DeleteUserResponseDto({
-            id: user.id,
-            email: user.email,
-        })
+    if (!user) {
+      throw new BadRequestException('user not found');
     }
+    const userByEmail = await this.userRepository.getByEmail(dto.email);
+    if (userByEmail) {
+      throw new BadRequestException('user already exists');
+    }
+    await this.userRepository.changeEmail(id, dto);
+    return new ChangeEmailUserResponseDto({ email: dto.email });
+  }
+
+  async changePasswordForAdmin(
+    id: number,
+    dto: ChangePasswordUserDto,
+  ): Promise<ChangePasswordUserResponseDto> {
+    const user = await this.userRepository.getById(id);
+
+    if (!user) {
+      throw new BadRequestException('user not found');
+    }
+    await this.userRepository.changePassword(id, dto.password);
+    return new ChangePasswordUserResponseDto({
+      message: 'successfully updated',
+    });
+  }
+
+  async delete(id: number): Promise<DeleteUserResponseDto> {
+    const user = await this.userRepository.getById(id);
+
+    if (!user) {
+      throw new BadRequestException('user not found');
+    }
+    await this.userRepository.delete(id);
+    return new DeleteUserResponseDto({
+      id: user.id,
+      email: user.email,
+    });
+  }
 }

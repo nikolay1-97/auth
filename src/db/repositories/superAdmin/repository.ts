@@ -4,7 +4,9 @@ import { SuperAdmin } from 'src/db/models/superAdmin/superAdmin';
 
 @Injectable()
 export class SuperAdminRepository {
-  constructor(@Inject('SuperAdmin') private modelClass: ModelClass<SuperAdmin>) {}
+  constructor(
+    @Inject('SuperAdmin') private modelClass: ModelClass<SuperAdmin>,
+  ) {}
 
   async getByEmail(email: string) {
     try {
@@ -12,12 +14,11 @@ export class SuperAdminRepository {
         .query()
         .select('*')
         .where('email', '=', email);
-      
+
       return superAdmin[0];
     } catch (e) {
       console.log(e);
       throw e;
     }
   }
-
 }

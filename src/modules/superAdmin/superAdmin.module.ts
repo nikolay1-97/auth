@@ -21,7 +21,7 @@ import { AppAdmin } from 'src/db/models/appAdmins/appAdmin';
 import { SuperAdminJwtStrategy } from 'src/feature-md/Strategy/superAdmin/superAdminStrategy';
 
 @Module({
-    controllers: [
+  controllers: [
     SuperAdminAuthController,
     ManageAppAdminsController,
     ManageUsersController,
@@ -44,5 +44,6 @@ import { SuperAdminJwtStrategy } from 'src/feature-md/Strategy/superAdmin/superA
     SecretService,
     JwtService,
     SuperAdminJwtStrategy,
-  ],})
+  ],
+})
 export class SuperAdminModule {}

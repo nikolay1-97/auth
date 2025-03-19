@@ -3,7 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from '@nestjs/class-transformer';
 
 export class CreateAppAdminResponseDto {
-
   @ApiProperty()
   @IsString()
   @IsEmail()
@@ -13,6 +12,6 @@ export class CreateAppAdminResponseDto {
   password: string;
 
   constructor(partial: Partial<CreateAppAdminResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

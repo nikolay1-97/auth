@@ -12,9 +12,7 @@ import { UserAuthService } from 'src/api/service/user/userAuth.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
-    controllers: [
-    UserController,
-  ],
+  controllers: [UserController],
   providers: [
     UserService,
     UserRepository,
@@ -26,5 +24,6 @@ import { JwtService } from '@nestjs/jwt';
     UserAuthService,
     //AppAdminJwtStrategy,
     JwtService,
-  ],})
+  ],
+})
 export class UserModule {}

@@ -1,5 +1,5 @@
-import { BaseModel } from "../baseModel";
-import { Model } from "objection";
+import { BaseModel } from '../baseModel';
+import { Model } from 'objection';
 
 export class UserRole extends Model {
   static tableName = 'user_role';

@@ -37,16 +37,16 @@ export class UserAuthService {
   async login(email: string, password: string, secret: string) {
     const user = await this.validateUser(email, password);
     if (user) {
-      const app = await this.appRepository.getBySecret(secret)
+      const app = await this.appRepository.getBySecret(secret);
       if (!app) {
-        throw new BadRequestException('app not found')
+        throw new BadRequestException('app not found');
       }
-      const roles = await this.userRoleRepository.getUserRoles(user.id)
+      const roles = await this.userRoleRepository.getUserRoles(user.id);
       const payload: {
-        sub: number,
-        username: string,
-        roles: UserRole[] | []
-    } = { sub: user.id, username: user.email, roles: roles };
+        sub: number;
+        username: string;
+        roles: UserRole[] | [];
+      } = { sub: user.id, username: user.email, roles: roles };
 
       const token: string = await this.jwtService.signAsync(payload, {
         secret: app.secret,

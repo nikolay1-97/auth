@@ -2,7 +2,6 @@ import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class DeleteRoleResponseDto {
-
   @ApiProperty()
   @IsNumber()
   readonly id: number;
@@ -15,9 +14,7 @@ export class DeleteRoleResponseDto {
   @IsString()
   readonly title: string;
 
-
-
   constructor(partial: Partial<DeleteRoleResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

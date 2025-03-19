@@ -16,6 +16,6 @@ export class DeleteUserResponseDto {
   password: string;
 
   constructor(partial: Partial<DeleteUserResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

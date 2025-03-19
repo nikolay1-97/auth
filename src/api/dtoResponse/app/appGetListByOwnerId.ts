@@ -3,7 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 
 export class GetListAppResponseDto {
-
   @ApiProperty()
   @IsString()
   readonly title: string;
@@ -13,7 +12,7 @@ export class GetListAppResponseDto {
   readonly secret: string;
 
   @Exclude()
-  owner_id: number
+  owner_id: number;
 
   @ApiProperty()
   @IsString()
@@ -23,8 +22,7 @@ export class GetListAppResponseDto {
   @IsString()
   readonly updated_at: string;
 
-
   constructor(partial: Partial<GetListAppResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

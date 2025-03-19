@@ -6,5 +6,4 @@ export class ChangeEmailAppAdminDto {
   @IsString()
   @IsEmail()
   readonly email: string;
-
 }

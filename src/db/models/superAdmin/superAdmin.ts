@@ -1,4 +1,4 @@
-import { BaseModel } from "../baseModel";
+import { BaseModel } from '../baseModel';
 
 export class SuperAdmin extends BaseModel {
   static tableName = 'super_admin';

@@ -30,8 +30,7 @@ export class GetAppAdminsResponseDto {
   @IsString()
   readonly updated_at: string;
 
-
   constructor(partial: Partial<GetAppAdminsResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

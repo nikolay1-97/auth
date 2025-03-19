@@ -1,14 +1,14 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Patch,
-    Delete,
-    Body,
-    Req,
-    Param,
-    ParseIntPipe,
-    UseGuards,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Req,
+  Param,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserRoleDto } from 'src/api/dto/userRole/userRoleCreate.dto';
@@ -26,38 +26,36 @@ import { RoleGuards } from 'src/api/guards/appAdmin/role.guards';
 @ApiTags('AppAdmin')
 @Controller('userRoles')
 export class UserRoleController {
-    constructor(
-        private readonly userRoleService: UserRoleService,
-     ) {}
+  constructor(private readonly userRoleService: UserRoleService) {}
 
-    @ApiResponse({ status: 200, type: CreateUserRoleResponseDto })
-    @UseGuards(AppOwnerGuards, UserRoleCreateGuards)
-    @Post('apps/:app_id/create')
-    async register(@Body() dto: CreateUserRoleDto,
+  @ApiResponse({ status: 200, type: CreateUserRoleResponseDto })
+  @UseGuards(AppOwnerGuards, UserRoleCreateGuards)
+  @Post('apps/:app_id/create')
+  async register(
+    @Body() dto: CreateUserRoleDto,
     @Param('app_id', ParseIntPipe) app_id: number,
-) {
-        return await this.userRoleService.create(dto)
-    }
+  ) {
+    return await this.userRoleService.create(dto);
+  }
 
-    @UseGuards(AppOwnerGuards, AppAdminUsersGuards, RoleGuards)
-    @ApiResponse({ status: 200, type: DeleteUserRoleResponseDto })
-    @Delete('apps/:app_id/users/:user_id/roles/:role_id')
-    async delete(
-        @Param('user_id', ParseIntPipe) user_id: number,
-        @Param('role_id', ParseIntPipe) role_id: number,
-        @Param('app_id', ParseIntPipe) app_id: number,
-        ): Promise<DeleteUserRoleResponseDto> {
-            return await this.userRoleService.delete(user_id, role_id);
-        }
+  @UseGuards(AppOwnerGuards, AppAdminUsersGuards, RoleGuards)
+  @ApiResponse({ status: 200, type: DeleteUserRoleResponseDto })
+  @Delete('apps/:app_id/users/:user_id/roles/:role_id')
+  async delete(
+    @Param('user_id', ParseIntPipe) user_id: number,
+    @Param('role_id', ParseIntPipe) role_id: number,
+    @Param('app_id', ParseIntPipe) app_id: number,
+  ): Promise<DeleteUserRoleResponseDto> {
+    return await this.userRoleService.delete(user_id, role_id);
+  }
 
-    @UseGuards(AppOwnerGuards, AppAdminUsersGuards)
-    @ApiResponse({ status: 200, type: [GetUserRolesResponseDto] })
-    @Get('apps/:app_id/users/:user_id')
-    async getUseRoles(
-      @Param('app_id', ParseIntPipe) app_id: number,
-      @Param('user_id', ParseIntPipe) user_id: number,
-    ): Promise<GetUserRolesResponseDto[]> {
-      return await this.userRoleService.getUserRoles(user_id);
-    }
-
+  @UseGuards(AppOwnerGuards, AppAdminUsersGuards)
+  @ApiResponse({ status: 200, type: [GetUserRolesResponseDto] })
+  @Get('apps/:app_id/users/:user_id')
+  async getUseRoles(
+    @Param('app_id', ParseIntPipe) app_id: number,
+    @Param('user_id', ParseIntPipe) user_id: number,
+  ): Promise<GetUserRolesResponseDto[]> {
+    return await this.userRoleService.getUserRoles(user_id);
+  }
 }

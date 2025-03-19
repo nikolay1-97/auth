@@ -5,5 +5,4 @@ export class ChangeTitleAppDto {
   @ApiProperty()
   @IsString()
   readonly title: string;
-
 }

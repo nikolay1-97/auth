@@ -10,42 +10,35 @@ import { DeleteAppAdminResponseDto } from 'src/api/dtoResponse/appAdmin/admin/ap
 import { GetAppAdminsResponseDto } from 'src/api/dtoResponse/appAdmin/admin/appAdminGetList.dto';
 import { plainToInstance } from 'class-transformer';
 
-
 @Injectable()
 export class AppAdminService {
-  constructor(
-    private readonly appAdminRepository: AppAdminRepository,
-  ) {}
+  constructor(private readonly appAdminRepository: AppAdminRepository) {}
 
-
-  async create(
-    dto: CreateAppAdminDto,
-  ): Promise<CreateAppAdminResponseDto> {
-    const appAdmin =
-      await this.appAdminRepository.getByEmail(dto.email);
+  async create(dto: CreateAppAdminDto): Promise<CreateAppAdminResponseDto> {
+    const appAdmin = await this.appAdminRepository.getByEmail(dto.email);
 
     if (!appAdmin) {
       await this.appAdminRepository.create(dto);
-      return new CreateAppAdminResponseDto({email: dto.email});
+      return new CreateAppAdminResponseDto({ email: dto.email });
     }
     throw new BadRequestException('appAdmin already exists');
   }
 
   async changeEmail(
-      id: number,
-      dto: ChangeEmailAppAdminDto,
-    ): Promise<ChangeEmailAppAdminResponseDto> {
-      const appAdmin = await this.appAdminRepository.getById(id);
-  
-      if (!appAdmin) {
-        throw new BadRequestException('appAdmin not found');
-      }
-      const appAdminByEmail = await this.appAdminRepository.getByEmail(dto.email)
-      if (appAdminByEmail) {
-          throw new BadRequestException('appAdmin already exists')
-      }
-      await this.appAdminRepository.changeEmail(id, dto);
-      return new ChangeEmailAppAdminResponseDto({email: dto.email});
+    id: number,
+    dto: ChangeEmailAppAdminDto,
+  ): Promise<ChangeEmailAppAdminResponseDto> {
+    const appAdmin = await this.appAdminRepository.getById(id);
+
+    if (!appAdmin) {
+      throw new BadRequestException('appAdmin not found');
+    }
+    const appAdminByEmail = await this.appAdminRepository.getByEmail(dto.email);
+    if (appAdminByEmail) {
+      throw new BadRequestException('appAdmin already exists');
+    }
+    await this.appAdminRepository.changeEmail(id, dto);
+    return new ChangeEmailAppAdminResponseDto({ email: dto.email });
   }
 
   async changePassword(
@@ -58,25 +51,27 @@ export class AppAdminService {
       throw new BadRequestException('appAdmin not found');
     }
     await this.appAdminRepository.changePassword(id, dto);
-    return new ChangePasswordAppAdminResponseDto({message: 'successfully updated'});
+    return new ChangePasswordAppAdminResponseDto({
+      message: 'successfully updated',
+    });
   }
 
   async delete(id: number): Promise<DeleteAppAdminResponseDto> {
-        const appAdmin = await this.appAdminRepository.getById(id);
-    
-        if (!appAdmin) {
-          throw new BadRequestException('appAdmin not found');
-        }
-        await this.appAdminRepository.delete(id);
-        return new DeleteAppAdminResponseDto({
-          id: appAdmin.id,
-          email: appAdmin.email,
-        })
+    const appAdmin = await this.appAdminRepository.getById(id);
+
+    if (!appAdmin) {
+      throw new BadRequestException('appAdmin not found');
+    }
+    await this.appAdminRepository.delete(id);
+    return new DeleteAppAdminResponseDto({
+      id: appAdmin.id,
+      email: appAdmin.email,
+    });
   }
 
   async getAppAdmins(): Promise<GetAppAdminsResponseDto[]> {
-        const appAdmins = await this.appAdminRepository.getAppAdmins();
-    
-        return plainToInstance(GetAppAdminsResponseDto, appAdmins)
+    const appAdmins = await this.appAdminRepository.getAppAdmins();
+
+    return plainToInstance(GetAppAdminsResponseDto, appAdmins);
   }
 }

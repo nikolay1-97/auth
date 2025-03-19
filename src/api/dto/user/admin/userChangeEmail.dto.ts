@@ -6,5 +6,4 @@ export class ChangeEmailUserDto {
   @IsString()
   @IsEmail()
   readonly email: string;
-
 }

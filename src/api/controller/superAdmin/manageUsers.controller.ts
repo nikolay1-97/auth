@@ -1,14 +1,14 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Patch,
-    Delete,
-    Body,
-    Req,
-    Param,
-    ParseIntPipe,
-    UseGuards,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Req,
+  Param,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from 'src/api/service/user/user.service';
@@ -21,48 +21,43 @@ import { GetUsersByAppIdUserResponseDto } from 'src/api/dtoResponse/user/usersGe
 import { GetUsersByAppIdForAdminResponseDto } from 'src/api/dtoResponse/user/admin/userGetUsersByAppIdForAdmin.dto';
 import { SuperAdminGuard } from 'src/api/guards/superAdmin/superAdminGuard';
 
-
 @UseGuards(SuperAdminGuard)
 @ApiTags('SuperAdmin')
 @Controller('super-admin-users')
 export class ManageUsersController {
-    constructor(
-        private readonly userService: UserService,
-     ) {}
+  constructor(private readonly userService: UserService) {}
 
+  @ApiResponse({ status: 200, type: ChangeEmailUserResponseDto })
+  @Patch('user/:id')
+  async changeEmail(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: ChangeEmailUserDto,
+  ): Promise<ChangeEmailUserResponseDto> {
+    return await this.userService.changeEmail(id, dto);
+  }
 
-    @ApiResponse({ status: 200, type: ChangeEmailUserResponseDto })
-    @Patch('user/:id')
-    async changeEmail(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() dto: ChangeEmailUserDto
-    ): Promise<ChangeEmailUserResponseDto> {
-        return await this.userService.changeEmail(id, dto)
-            
-    }
+  @ApiResponse({ status: 200, type: ChangePasswordUserResponseDto })
+  @Patch('users/:id')
+  async changePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: ChangePasswordUserDto,
+  ): Promise<ChangePasswordUserResponseDto> {
+    return await this.userService.changePasswordForAdmin(id, dto);
+  }
 
-    @ApiResponse({ status: 200, type: ChangePasswordUserResponseDto })
-    @Patch('users/:id')
-    async changePassword(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() dto: ChangePasswordUserDto
-    ): Promise<ChangePasswordUserResponseDto> {
-        return await this.userService.changePasswordForAdmin(id, dto)
-            
-    }
+  @ApiResponse({ status: 200, type: DeleteUserResponseDto })
+  @Delete('user/:id')
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<DeleteUserResponseDto> {
+    return await this.userService.delete(id);
+  }
 
-    @ApiResponse({ status: 200, type: DeleteUserResponseDto })
-    @Delete('user/:id')
-    async delete(
-      @Param('id', ParseIntPipe) id: number,
-    ): Promise<DeleteUserResponseDto> {
-        return await this.userService.delete(id);
-    }
-
-    @ApiResponse({ status: 200, type: [GetUsersByAppIdForAdminResponseDto] })
-    @Get('users/:app_id')
-    async getListByAppId(@Param('app_id', ParseIntPipe) app_id: number): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
-      return await this.userService.getByAppIdForAdmin(app_id);
-    }
-
+  @ApiResponse({ status: 200, type: [GetUsersByAppIdForAdminResponseDto] })
+  @Get('users/:app_id')
+  async getListByAppId(
+    @Param('app_id', ParseIntPipe) app_id: number,
+  ): Promise<GetUsersByAppIdUserResponseDto[] | undefined> {
+    return await this.userService.getByAppIdForAdmin(app_id);
+  }
 }

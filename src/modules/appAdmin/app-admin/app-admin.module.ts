@@ -9,9 +9,7 @@ import { AppAdminJwtStrategy } from 'src/feature-md/Strategy/appAdmin/appAdminSt
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
-    controllers: [
-    AppAdminController,
-  ],
+  controllers: [AppAdminController],
   providers: [
     AppAdminService,
     AppAdminRepository,
@@ -20,5 +18,6 @@ import { JwtService } from '@nestjs/jwt';
     AppAdminAuthService,
     AppAdminJwtStrategy,
     JwtService,
-  ],})
+  ],
+})
 export class AppAdminModule {}

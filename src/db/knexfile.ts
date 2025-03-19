@@ -2,7 +2,7 @@
 
 import { Knex } from 'knex';
 import { knexSnakeCaseMappers } from 'objection';
-import conf from '../configuration/index'
+import conf from '../configuration/index';
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -10,7 +10,7 @@ import conf from '../configuration/index'
 module.exports = {
   development: {
     client: 'pg',
-    connection: "postgres://postgres:1234@localhost/pw_task2",
+    connection: conf().db_url,
     pool: {
       min: 2,
       max: 10,

@@ -7,15 +7,7 @@ import { Role } from 'src/db/models/role/role';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
-    controllers: [
-        RoleController,
-      ],
-      providers: [
-        RoleService,
-        RoleRepository,
-        AppRepository,
-        Role,
-        JwtService,
-      ],
+  controllers: [RoleController],
+  providers: [RoleService, RoleRepository, AppRepository, Role, JwtService],
 })
 export class RoleModule {}

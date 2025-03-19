@@ -8,8 +8,10 @@ import { PasswordService } from 'src/feature-md/password/password.service';
 
 @Injectable()
 export class AppAdminRepository {
-  constructor(@Inject('AppAdmin') private modelClass: ModelClass<AppAdmin>,
-              private readonly passwordService: PasswordService) {}
+  constructor(
+    @Inject('AppAdmin') private modelClass: ModelClass<AppAdmin>,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async getById(id: number) {
     try {
@@ -30,7 +32,7 @@ export class AppAdminRepository {
         .query()
         .select('*')
         .where('email', '=', email);
-      
+
       return appAdmin[0];
     } catch (e) {
       console.log(e);
@@ -42,8 +44,8 @@ export class AppAdminRepository {
     try {
       const data: object = {
         email: dto.email,
-        password: await this.passwordService.getPasswordHash(dto.password)
-      }
+        password: await this.passwordService.getPasswordHash(dto.password),
+      };
       await this.modelClass.query().insert(data);
       return dto;
     } catch (e) {
@@ -53,55 +55,56 @@ export class AppAdminRepository {
   }
 
   async changeEmail(id: number, dto: ChangeEmailAppAdminDto) {
-      try {
-        await this.modelClass
-          .query()
-          .patch(dto)
-          .where({ id })
-          .returning('*')
-          .first();
-        return dto;
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+    try {
+      await this.modelClass
+        .query()
+        .patch(dto)
+        .where({ id })
+        .returning('*')
+        .first();
+      return dto;
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
-  
-    async changePassword(id: number, dto: ChangePasswordAppAdminDto) {
-        try {
-          const newPassword = await this.passwordService.getPasswordHash(dto.password)
-          const data = {password: newPassword}
-          await this.modelClass
-            .query()
-            .patch(data)
-            .where({ id })
-            .returning('*')
-            .first();
-          return dto;
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
-    }
+  }
 
-    async delete(id: number) {
-        try {
-          await this.modelClass.query().deleteById(id);
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
+  async changePassword(id: number, dto: ChangePasswordAppAdminDto) {
+    try {
+      const newPassword = await this.passwordService.getPasswordHash(
+        dto.password,
+      );
+      const data = { password: newPassword };
+      await this.modelClass
+        .query()
+        .patch(data)
+        .where({ id })
+        .returning('*')
+        .first();
+      return dto;
+    } catch (e) {
+      console.log(e);
+      throw e;
     }
+  }
 
-    async getAppAdmins() {
-        try {
-          const appAdmin: AppAdmin[] | undefined = await this.modelClass
-            .query();
-    
-          return appAdmin;
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
-      }
+  async delete(id: number) {
+    try {
+      await this.modelClass.query().deleteById(id);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getAppAdmins() {
+    try {
+      const appAdmin: AppAdmin[] | undefined = await this.modelClass.query();
+
+      return appAdmin;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
 }

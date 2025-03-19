@@ -11,5 +11,4 @@ export class CreateAppAdminDto {
   @MinLength(6)
   @IsString()
   readonly password: string;
-
 }

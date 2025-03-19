@@ -2,7 +2,6 @@ import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RoleGetListByAppIdResponseDto {
-
   @ApiProperty()
   @IsNumber()
   readonly id: number;
@@ -23,9 +22,7 @@ export class RoleGetListByAppIdResponseDto {
   @IsString()
   readonly updated_at: string;
 
-
-
   constructor(partial: Partial<RoleGetListByAppIdResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

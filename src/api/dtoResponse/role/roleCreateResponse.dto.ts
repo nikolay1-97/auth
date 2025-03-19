@@ -2,7 +2,6 @@ import { IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateRoleResponseDto {
-
   @ApiProperty()
   @IsString()
   readonly title: string;
@@ -11,8 +10,7 @@ export class CreateRoleResponseDto {
   @IsNumber()
   readonly app_id: number;
 
-
   constructor(partial: Partial<CreateRoleResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

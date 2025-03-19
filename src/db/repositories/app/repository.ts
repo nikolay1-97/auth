@@ -10,9 +10,7 @@ export class AppRepository {
 
   async getById(id: number) {
     try {
-      const app: App | undefined = await this.modelClass
-        .query()
-        .findById(id);
+      const app: App | undefined = await this.modelClass.query().findById(id);
 
       return app;
     } catch (e) {
@@ -27,7 +25,7 @@ export class AppRepository {
         .query()
         .select('*')
         .where('secret', '=', secret);
-      
+
       return app[0];
     } catch (e) {
       console.log(e);
@@ -41,7 +39,7 @@ export class AppRepository {
         .query()
         .select('*')
         .where('title', '=', title);
-      
+
       return app[0];
     } catch (e) {
       console.log(e);
@@ -55,7 +53,7 @@ export class AppRepository {
         .query()
         .select('*')
         .where('owner_id', '=', owner_id);
-      
+
       return app;
     } catch (e) {
       console.log(e);
@@ -63,17 +61,13 @@ export class AppRepository {
     }
   }
 
-  async create(
-    appAdminId: number,
-    secret: string,
-    dto: CreateAppDto,
-  ) {
+  async create(appAdminId: number, secret: string, dto: CreateAppDto) {
     try {
       const data: object = {
         title: dto.title,
         secret: secret,
         owner_id: appAdminId,
-      }
+      };
       await this.modelClass.query().insert(data);
       return dto;
     } catch (e) {
@@ -84,7 +78,7 @@ export class AppRepository {
 
   async update(id: number, secret: string) {
     try {
-      const data: {secret: string} = {secret: secret}
+      const data: { secret: string } = { secret: secret };
       await this.modelClass
         .query()
         .patch(data)
@@ -108,17 +102,17 @@ export class AppRepository {
   }
 
   async changeTitle(id: number, dto: ChangeTitleAppDto) {
-        try {
-          await this.modelClass
-            .query()
-            .patch(dto)
-            .where({ id })
-            .returning('*')
-            .first();
-          return dto;
-        } catch (e) {
-          console.log(e);
-          throw e;
-        }
+    try {
+      await this.modelClass
+        .query()
+        .patch(dto)
+        .where({ id })
+        .returning('*')
+        .first();
+      return dto;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
   }
 }

@@ -30,8 +30,7 @@ export class GetUsersByAppIdUserResponseDto {
   @IsString()
   readonly updated_at: string;
 
-
   constructor(partial: Partial<GetUsersByAppIdUserResponseDto>) {
-    Object.assign(this, partial)
+    Object.assign(this, partial);
   }
 }

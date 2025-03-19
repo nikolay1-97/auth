@@ -10,9 +10,7 @@ export class RoleRepository {
 
   async getById(id: number) {
     try {
-      const role: Role | undefined = await this.modelClass
-        .query()
-        .findById(id);
+      const role: Role | undefined = await this.modelClass.query().findById(id);
 
       return role;
     } catch (e) {
@@ -27,7 +25,7 @@ export class RoleRepository {
         .query()
         .select('*')
         .where('app_id', '=', app_id);
-      
+
       return role;
     } catch (e) {
       console.log(e);
@@ -43,11 +41,8 @@ export class RoleRepository {
         .where('owner_id', '=', owner_id)
         .join('app', 'roles.app_id', '=', 'app.id')
         .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
-        .select(
-            'roles.id',
-            'roles.title',
-        );
-      
+        .select('roles.id', 'roles.title');
+
       return roles;
     } catch (e) {
       console.log(e);
@@ -61,7 +56,7 @@ export class RoleRepository {
         .query()
         .select('*')
         .where('title', '=', title);
-      
+
       return role[0];
     } catch (e) {
       console.log(e);
@@ -76,7 +71,7 @@ export class RoleRepository {
         .select('*')
         .where('app_id', '=', app_id)
         .where('title', '=', title);
-      
+
       return role[0];
     } catch (e) {
       console.log(e);
@@ -84,9 +79,7 @@ export class RoleRepository {
     }
   }
 
-  async create(
-    dto: CreateRoleDto,
-  ) {
+  async create(dto: CreateRoleDto) {
     try {
       await this.modelClass.query().insert(dto);
       return dto;

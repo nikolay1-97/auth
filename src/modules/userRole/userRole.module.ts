@@ -10,18 +10,16 @@ import { JwtService } from '@nestjs/jwt';
 import { AppRepository } from 'src/db/repositories/app/repository';
 
 @Module({
-    controllers: [
-        UserRoleController,
-      ],
-      providers: [
-        UserRoleService,
-        UserRoleRepository,
-        RoleRepository,
-        UserRepository,
-        UserRole,
-        PasswordService,
-        JwtService,
-        AppRepository,
-      ],
+  controllers: [UserRoleController],
+  providers: [
+    UserRoleService,
+    UserRoleRepository,
+    RoleRepository,
+    UserRepository,
+    UserRole,
+    PasswordService,
+    JwtService,
+    AppRepository,
+  ],
 })
 export class UserRoleModule {}

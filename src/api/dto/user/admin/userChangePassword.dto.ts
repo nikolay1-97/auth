@@ -6,5 +6,4 @@ export class ChangePasswordUserDto {
   @MinLength(6)
   @IsString()
   readonly password: string;
-
 }

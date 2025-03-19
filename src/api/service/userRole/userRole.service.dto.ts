@@ -8,9 +8,6 @@ import { DeleteUserRoleResponseDto } from 'src/api/dtoResponse/userRole/userRole
 import { GetUserRolesResponseDto } from 'src/api/dtoResponse/userRole/getUserRoles.dto';
 import { plainToInstance } from 'class-transformer';
 
-
-
-
 @Injectable()
 export class UserRoleService {
   constructor(
@@ -19,64 +16,70 @@ export class UserRoleService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async create(
-    dto: CreateUserRoleDto,
-  ): Promise<CreateUserRoleResponseDto> {
-    const user = await this.userRepository.getById(dto.user_id)
+  async create(dto: CreateUserRoleDto): Promise<CreateUserRoleResponseDto> {
+    const user = await this.userRepository.getById(dto.user_id);
     if (!user) {
-        throw new BadRequestException('user not found')
+      throw new BadRequestException('user not found');
     }
-    const role =
-      await this.roleRepository.getById(dto.role_id);
+    const role = await this.roleRepository.getById(dto.role_id);
 
     if (!role) {
-      throw new BadRequestException('role not found')
+      throw new BadRequestException('role not found');
     }
 
-    const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(dto.user_id, dto.role_id)
+    const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(
+      dto.user_id,
+      dto.role_id,
+    );
     if (userRole) {
-        throw new BadRequestException('row of userRole already exists')
+      throw new BadRequestException('row of userRole already exists');
     }
 
-    await this.userRoleRepository.create(dto)
-    return new CreateUserRoleResponseDto({user_id: dto.user_id, role_id: dto.role_id})
-  
+    await this.userRoleRepository.create(dto);
+    return new CreateUserRoleResponseDto({
+      user_id: dto.user_id,
+      role_id: dto.role_id,
+    });
   }
 
-  async delete(user_id: number, role_id: number): Promise<DeleteUserRoleResponseDto> {
-        const user = await this.userRepository.getById(user_id);
-    
-        if (!user) {
-          throw new BadRequestException('user not found');
-        }
+  async delete(
+    user_id: number,
+    role_id: number,
+  ): Promise<DeleteUserRoleResponseDto> {
+    const user = await this.userRepository.getById(user_id);
 
-        const role = await this.roleRepository.getById(role_id)
+    if (!user) {
+      throw new BadRequestException('user not found');
+    }
 
-        if(!role) {
-            throw new BadRequestException('role not found')
-        }
+    const role = await this.roleRepository.getById(role_id);
 
-        const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(user_id, role_id)
-        if (!userRole) {
-            throw new BadRequestException('row of userRole not found')
-        }
+    if (!role) {
+      throw new BadRequestException('role not found');
+    }
 
-        await this.userRoleRepository.delete(user_id, role_id);
-        return new DeleteUserRoleResponseDto({
-          user_id: user.id,
-          role_id: role.id,
-        })
+    const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(
+      user_id,
+      role_id,
+    );
+    if (!userRole) {
+      throw new BadRequestException('row of userRole not found');
+    }
+
+    await this.userRoleRepository.delete(user_id, role_id);
+    return new DeleteUserRoleResponseDto({
+      user_id: user.id,
+      role_id: role.id,
+    });
   }
 
   async getUserRoles(user_id: number): Promise<GetUserRolesResponseDto[]> {
-      const user = await this.userRepository.getById(user_id)
-      if (!user) {
-        throw new BadRequestException('user not found')
-      }
-      const userRoles = await this.userRoleRepository.getUserRoles(user_id)
-  
-      return plainToInstance(GetUserRolesResponseDto, userRoles)
+    const user = await this.userRepository.getById(user_id);
+    if (!user) {
+      throw new BadRequestException('user not found');
+    }
+    const userRoles = await this.userRoleRepository.getUserRoles(user_id);
+
+    return plainToInstance(GetUserRolesResponseDto, userRoles);
   }
-
-
 }

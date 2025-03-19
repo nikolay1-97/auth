@@ -9,8 +9,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get('port');
   const config = new DocumentBuilder()
-    .setTitle('Регистратура')
-    .setDescription('онлайн регистратура')
+    .setTitle('Сервис аутентификации')
+    .setDescription('сервис аутентификации')
     .setVersion('1.0')
     .addTag('AppAdmin')
     .addTag('User')
