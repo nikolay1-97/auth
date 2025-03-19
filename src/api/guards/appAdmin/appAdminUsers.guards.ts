@@ -35,12 +35,12 @@ export class AppAdminUsersGuards implements CanActivate {
         }
 
         for (let count=0; count <= users.length-1; count++) {
-            if (users[count].id != user_id) {
-                throw new BadRequestException('user not found');
+            if (users[count].id == user_id) {
+                return true;
             }
         }
 
-        return true;
+        throw new BadRequestException('users not found');
 
     }
 }

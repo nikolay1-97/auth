@@ -32,6 +32,7 @@ export class UserRoleCreateGuards implements CanActivate {
         if (!payload) {
             throw new UnauthorizedException();
         }
+        let cnt: number = 0;
 
         const users = await this.userRepository.getByAppIdAndOwnerId(app_id, payload.sub)
         if (users.length == 0) {
@@ -39,8 +40,8 @@ export class UserRoleCreateGuards implements CanActivate {
         }
 
         for (let count=0; count <= users.length-1; count++) {
-            if (users[count].id != user_id) {
-                throw new BadRequestException('user not found');
+            if (users[count].id == user_id) {
+                cnt = cnt + 1;
             }
         }
 
@@ -50,11 +51,15 @@ export class UserRoleCreateGuards implements CanActivate {
         }
 
         for (let count=0; count <= roles.length-1; count++) {
-            if (roles[count].id != role_id) {
-                throw new BadRequestException('role not found');
+            if (roles[count].id == role_id) {
+                cnt = cnt + 1;
             }
         }
         
+        if (cnt != 2) {
+            throw new BadRequestException('user or role not found');
+        }
+
         return true;
 
     }

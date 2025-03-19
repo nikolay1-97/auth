@@ -39,7 +39,7 @@ export async function seed(knex: Knex): Promise<void> {
         title: 'app2',
     }]);
     await knex("app").insert([{
-        owner_id: 2,
+        owner_id: 1,
         secret: 'qwertyuiopuihrjnfwefiowek',
         title: 'app3',
     }]);

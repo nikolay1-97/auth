@@ -38,12 +38,12 @@ export class RoleGuards implements CanActivate {
         }
 
         for (let count=0; count <= roles.length-1; count++) {
-            if (roles[count].id != role_id) {
-                throw new BadRequestException('role not found');
+            if (roles[count].id == role_id) {
+                return true;
             }
         }
 
-        return true;
+        throw new BadRequestException('roles not found');;
 
     }
 }

@@ -34,12 +34,12 @@ export class RoleCreateGuards implements CanActivate {
             throw new BadRequestException('app not found');
         }
         for (let count=0; count <= apps.length-1; count++) {
-            if (apps[count].id != app_id) {
-                throw new BadRequestException('app not found');
+            if (apps[count].id == app_id) {
+                return true;
             }
         }
 
-        return true;
+        throw new BadRequestException('app not found');
 
     }
 }
