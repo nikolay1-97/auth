@@ -57,7 +57,7 @@ describe('UserRoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/userRoles/apps/2/create (POST)', async () => {
+    it('/userRoles/apps/3/create (POST)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -66,7 +66,7 @@ describe('UserRoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .post('/userRoles/apps/2/create')
+        .post('/userRoles/apps/3/create')
         .set('Authorization', 'Bearer ' + token)
         .send({
           user_id: 1,
@@ -91,7 +91,7 @@ describe('UserRoleController (e2e)', () => {
         .post('/userRoles/apps/1/create')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          user_id: 2,
+          user_id: 3,
           role_id: 1,
         })
         .expect(400)
@@ -114,7 +114,7 @@ describe('UserRoleController (e2e)', () => {
         .set('Authorization', 'Bearer ' + token)
         .send({
           user_id: 1,
-          role_id: 2,
+          role_id: 3,
         })
         .expect(400)
         .expect({
@@ -137,7 +137,7 @@ describe('UserRoleController (e2e)', () => {
         .expect(200)
         .expect([{ id: 1, title: 'role1' }]);
     }),
-    it('/userRoles/apps/2/users/1 (GET)', async () => {
+    it('/userRoles/apps/3/users/1 (GET)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -146,7 +146,7 @@ describe('UserRoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .get('/userRoles/apps/2/users/1')
+        .get('/userRoles/apps/3/users/1')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({
@@ -155,7 +155,7 @@ describe('UserRoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/userRoles/apps/1/users/2 (GET)', async () => {
+    it('/userRoles/apps/1/users/3 (GET)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -164,7 +164,7 @@ describe('UserRoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .get('/userRoles/apps/1/users/2')
+        .get('/userRoles/apps/1/users/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({

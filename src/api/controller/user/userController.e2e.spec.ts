@@ -30,7 +30,10 @@ describe('UserController (e2e)', () => {
       .set('Authorization', 'Bearer ' + token)
       .expect(200)
       .expect((response) => {
-        return response.body.email == 'user1@mail.ru';
+        return (
+          response.body[0].email == 'user1@mail.ru' &&
+          response.body[1] == 'user2@mail.ru'
+        );
       });
   }),
     it('/users (PATCH)', async () => {
@@ -100,23 +103,6 @@ describe('UserController (e2e)', () => {
         .post('/users/register')
         .send({
           credentials: {
-            email: 'user4@mail.ru',
-            password: 'qwerty',
-          },
-          data: {
-            question: 'string',
-            answer: 'string',
-          },
-          secret: 'qwertyuiop',
-        })
-        .expect(201)
-        .expect({ email: 'user4@mail.ru' });
-    }),
-    it('/users/register (POST)', async () => {
-      return request(app.getHttpServer())
-        .post('/users/register')
-        .send({
-          credentials: {
             email: 'user5@mail.ru',
             password: 'qwerty',
           },
@@ -124,7 +110,24 @@ describe('UserController (e2e)', () => {
             question: 'string',
             answer: 'string',
           },
-          secret: 'qwertyuiopjhnjknkjbkbkj',
+          secret: 'qwertyuiopuihoih',
+        })
+        .expect(201)
+        .expect({ email: 'user5@mail.ru' });
+    }),
+    it('/users/register (POST)', async () => {
+      return request(app.getHttpServer())
+        .post('/users/register')
+        .send({
+          credentials: {
+            email: 'user6@mail.ru',
+            password: 'qwerty',
+          },
+          data: {
+            question: 'string',
+            answer: 'string',
+          },
+          secret: 'qwertyuiopjhnjknkjbkbkjnjkhgvb',
         })
         .expect(400)
         .expect({
@@ -138,14 +141,14 @@ describe('UserController (e2e)', () => {
         .post('/users/register')
         .send({
           credentials: {
-            email: 'user4@mail.ru',
+            email: 'user5@mail.ru',
             password: 'qwerty',
           },
           data: {
             question: 'string',
             answer: 'string',
           },
-          secret: 'qwertyuiop',
+          secret: 'qwertyuiopuihoih',
         })
         .expect(400)
         .expect({

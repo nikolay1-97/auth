@@ -30,10 +30,12 @@ describe('RoleController (e2e)', () => {
       .set('Authorization', 'Bearer ' + token)
       .expect(200)
       .expect((response) => {
-        return response.body.title == 'role1';
+        return (
+          response.body[0].title == 'role1' && response.body[1].title == 'role2'
+        );
       });
   }),
-    it('/roles/2 (GET)', async () => {
+    it('/roles/3 (GET)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -42,7 +44,7 @@ describe('RoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .get('/roles/2')
+        .get('/roles/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({
@@ -51,16 +53,16 @@ describe('RoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/roles/apps/1/roles/1 (PATCH)', async () => {
+    it('/roles/apps/3/roles/3 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/roles/apps/1/roles/1')
+        .patch('/roles/apps/3/roles/3')
         .set('Authorization', 'Bearer ' + token)
         .send({ title: 'new_role1' })
         .expect(200)
@@ -68,7 +70,7 @@ describe('RoleController (e2e)', () => {
           newTitle: 'new_role1',
         });
     }),
-    it('/roles/apps/2/roles/1 (PATCH)', async () => {
+    it('/roles/apps/3/roles/1 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -77,7 +79,7 @@ describe('RoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/roles/apps/2/roles/1')
+        .patch('/roles/apps/3/roles/1')
         .set('Authorization', 'Bearer ' + token)
         .send({ title: 'new_role1' })
         .expect(400)
@@ -87,7 +89,7 @@ describe('RoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/roles/apps/1/roles/2 (PATCH)', async () => {
+    it('/roles/apps/1/roles/3 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
@@ -96,7 +98,7 @@ describe('RoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/roles/apps/1/roles/2')
+        .patch('/roles/apps/1/roles/3')
         .set('Authorization', 'Bearer ' + token)
         .send({ title: 'new_role1' })
         .expect(400)
@@ -109,7 +111,7 @@ describe('RoleController (e2e)', () => {
     it('/roles/create (POST)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
@@ -118,16 +120,16 @@ describe('RoleController (e2e)', () => {
         .post('/roles/create')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          title: 'role4',
-          app_id: 1,
+          title: 'role5',
+          app_id: 3,
         })
         .expect(201)
-        .expect({ title: 'role4', app_id: 1 });
+        .expect({ title: 'role5', app_id: 3 });
     }),
     it('/roles/create (POST)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
@@ -136,8 +138,8 @@ describe('RoleController (e2e)', () => {
         .post('/roles/create')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          title: 'role4',
-          app_id: 1,
+          title: 'role5',
+          app_id: 3,
         })
         .expect(400)
         .expect({
@@ -158,8 +160,8 @@ describe('RoleController (e2e)', () => {
         .post('/roles/create')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          title: 'role5',
-          app_id: 2,
+          title: 'role6',
+          app_id: 3,
         })
         .expect(400)
         .expect({
@@ -168,7 +170,7 @@ describe('RoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/roles/apps/2/role/3 (DELETE)', async () => {
+    it('/roles/apps/3/role/3 (DELETE)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
         .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
@@ -177,25 +179,25 @@ describe('RoleController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .delete('/roles/apps/2/role/3')
+        .delete('/roles/apps/3/role/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(200)
         .expect({
           id: 3,
-          app_id: 2,
-          title: 'role3',
+          app_id: 3,
+          title: 'new_role1',
         });
     }),
-    it('/roles/apps/2/role/1 (DELETE)', async () => {
+    it('/roles/apps/1/role/3 (DELETE)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .delete('/roles/apps/2/role/1')
+        .delete('/roles/apps/1/role/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({
@@ -204,16 +206,16 @@ describe('RoleController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/roles/apps/1/role/1 (DELETE)', async () => {
+    it('/roles/apps/3/role/1 (DELETE)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .delete('/roles/apps/1/role/1')
+        .delete('/roles/apps/3/role/1')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({

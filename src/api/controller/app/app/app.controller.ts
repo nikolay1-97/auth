@@ -52,6 +52,7 @@ export class AppsController {
   @Patch(':app_id')
   async changeSecret(
     @Param('app_id', ParseIntPipe) app_id: number,
+    @Req() request: Request,
   ): Promise<UpdateAppResponseDto> {
     await this.appService.update(app_id);
     return new UpdateAppResponseDto({ message: 'successfully updated' });

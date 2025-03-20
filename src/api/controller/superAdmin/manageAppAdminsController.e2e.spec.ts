@@ -17,7 +17,7 @@ describe('ManageAppAdminsController (e2e)', () => {
     await app.init();
   });
 
-  it('/super-admin/app-admin/1 (PATCH)', async () => {
+  it('/super-admin/app-admin/4 (PATCH)', async () => {
     const loginResponse = await request(app.getHttpServer())
       .post('/super-admin/login')
       .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
@@ -26,7 +26,7 @@ describe('ManageAppAdminsController (e2e)', () => {
     const token = loginResponse.body.access_token;
 
     return request(app.getHttpServer())
-      .patch('/super-admin/app-admin/1')
+      .patch('/super-admin/app-admin/4')
       .send({ email: 'newemail@mail.ru' })
       .set('Authorization', 'Bearer ' + token)
       .expect(200)
@@ -53,7 +53,7 @@ describe('ManageAppAdminsController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    it('/super-admin/app-admins/1 (PATCH)', async () => {
+    it('/super-admin/app-admins/4 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/super-admin/login')
         .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
@@ -62,7 +62,7 @@ describe('ManageAppAdminsController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/super-admin/app-admins/1')
+        .patch('/super-admin/app-admins/4')
         .send({ password: 'qwertyui' })
         .set('Authorization', 'Bearer ' + token)
         .expect(200)
@@ -81,6 +81,41 @@ describe('ManageAppAdminsController (e2e)', () => {
       return request(app.getHttpServer())
         .patch('/super-admin/app-admins/10')
         .send({ password: 'qwertyui' })
+        .set('Authorization', 'Bearer ' + token)
+        .expect(400)
+        .expect({
+          message: 'appAdmin not found',
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    }),
+    it('/super-admin/app-admin/4 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin/app-admin/4')
+        .set('Authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect({
+          id: 4,
+          email: 'newemail@mail.ru',
+        });
+    }),
+    it('/super-admin/app-admin/4 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin/app-admin/4')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({

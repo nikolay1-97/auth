@@ -30,10 +30,12 @@ describe('ManageAppController (e2e)', () => {
       .set('Authorization', 'Bearer ' + token)
       .expect(200)
       .expect((response) => {
-        return response.body.title == 'app1';
+        return (
+          response.body[0].title == 'app1' && response.body[1].title == 'app2'
+        );
       });
   }),
-    it('/super-admin-app/app/1 (PATCH)', async () => {
+    it('/super-admin-app/app/3 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/super-admin/login')
         .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
@@ -42,7 +44,7 @@ describe('ManageAppController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/super-admin-app/app/1')
+        .patch('/super-admin-app/app/3')
         .send({ title: 'app10' })
         .set('Authorization', 'Bearer ' + token)
         .expect(200)
@@ -69,7 +71,43 @@ describe('ManageAppController (e2e)', () => {
           statusCode: 400,
         });
     }),
-    afterAll(async () => {
-      await app.close();
+    it('/super-admin-app/app/5 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin-app/app/5')
+        .set('Authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect({
+          id: 5,
+          title: 'app5',
+        });
+    }),
+    it('/super-admin-app/app/5 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin-app/app/5')
+        .set('Authorization', 'Bearer ' + token)
+        .expect(400)
+        .expect({
+          message: 'app not found',
+          error: 'Bad Request',
+          statusCode: 400,
+        });
     });
+
+  afterAll(async () => {
+    await app.close();
+  });
 });

@@ -39,5 +39,4 @@ export class AppAdminUsersGuards implements CanActivate {
 
     return true;
   }
-
 }

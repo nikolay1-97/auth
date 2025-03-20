@@ -19,8 +19,8 @@ export class UserAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async validateUser(email: string, password: string) {
-    const user = await this.userRepository.getByEmail(email);
+  async validateUser(email: string, password: string, app_id: number) {
+    const user = await this.userRepository.getByEmailAndAppId(app_id, email);
     if (user) {
       const isValid = await this.passwordService.verify_password(
         password,
@@ -35,12 +35,12 @@ export class UserAuthService {
   }
 
   async login(email: string, password: string, secret: string) {
-    const user = await this.validateUser(email, password);
+    const app = await this.appRepository.getBySecret(secret);
+    if (!app) {
+      throw new BadRequestException('app not found');
+    }
+    const user = await this.validateUser(email, password, app.id);
     if (user) {
-      const app = await this.appRepository.getBySecret(secret);
-      if (!app) {
-        throw new BadRequestException('app not found');
-      }
       const roles = await this.userRoleRepository.getUserRoles(user.id);
       const payload: {
         sub: number;

@@ -24,7 +24,7 @@ exports.up = function (knex) {
     .createTable('users', function (table) {
       table.increments().primary();
       table.integer('app_id').notNullable();
-      table.string('email').unique();
+      table.string('email');
       table.string('password').notNullable();
       table.jsonb('data').notNullable();
       table
@@ -37,7 +37,7 @@ exports.up = function (knex) {
     .createTable('roles', function (table) {
       table.increments().primary();
       table.integer('app_id').notNullable();
-      table.string('title').unique();
+      table.string('title');
       table
         .foreign('app_id')
         .references('id')

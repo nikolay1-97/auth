@@ -37,6 +37,22 @@ export class UserRepository {
     }
   }
 
+  async getByEmailAndAppId(app_id: number, email: string) {
+    try {
+      const user: User[] | undefined = await this.modelClass
+        .query()
+        .where('app.id', '=', app_id)
+        .where('users.email', '=', email)
+        .join('app', 'users.app_id', '=', 'app.id')
+        .select('users.id', 'users.email', 'users.password');
+
+      return user[0];
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   async getByAppid(app_id: number) {
     try {
       const user: User[] | undefined = await this.modelClass

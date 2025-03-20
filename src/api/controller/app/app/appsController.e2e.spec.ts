@@ -17,10 +17,10 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/users/1 (GET)', async () => {
+  it('/apps', async () => {
     const loginResponse = await request(app.getHttpServer())
       .post('/app-admins/login')
-      .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
+      .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
       .expect(201);
 
     const token = loginResponse.body.access_token;
@@ -30,7 +30,9 @@ describe('AppController (e2e)', () => {
       .set('Authorization', 'Bearer ' + token)
       .expect(200)
       .expect((response) => {
-        return response.body.title == 'app2';
+        return (
+          response.body[0].title == 'app1' && response.body[1].title == 'app2'
+        );
       });
   }),
     it('/apps (PATCH)', async () => {
@@ -58,7 +60,7 @@ describe('AppController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/apps/2')
+        .patch('/apps/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({
@@ -70,7 +72,7 @@ describe('AppController (e2e)', () => {
     it('/apps/register (POST)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
@@ -79,15 +81,15 @@ describe('AppController (e2e)', () => {
         .post('/apps/register')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          title: 'app4',
+          title: 'app15',
         })
         .expect(201)
-        .expect({ title: 'app4' });
+        .expect({ title: 'app15' });
     }),
     it('/apps/register (POST)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
@@ -96,7 +98,7 @@ describe('AppController (e2e)', () => {
         .post('/apps/register')
         .set('Authorization', 'Bearer ' + token)
         .send({
-          title: 'app4',
+          title: 'app15',
         })
         .expect(400)
         .expect({
@@ -108,30 +110,30 @@ describe('AppController (e2e)', () => {
     it('/apps (DELETE)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin3@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .delete('/apps/3')
+        .delete('/apps/4')
         .set('Authorization', 'Bearer ' + token)
         .expect(200)
         .expect({
-          id: 3,
-          title: 'app3',
+          id: 4,
+          title: 'app4',
         });
     }),
     it('/apps (DELETE)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/app-admins/login')
-        .send({ email: 'appAdmin1@mail.ru', password: 'qwerty' })
+        .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
         .expect(201);
 
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .delete('/apps/10')
+        .delete('/apps/4')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({
@@ -140,6 +142,24 @@ describe('AppController (e2e)', () => {
           statusCode: 400,
         });
     });
+  it('/apps (DELETE)', async () => {
+    const loginResponse = await request(app.getHttpServer())
+      .post('/app-admins/login')
+      .send({ email: 'appAdmin2@mail.ru', password: 'qwerty' })
+      .expect(201);
+
+    const token = loginResponse.body.access_token;
+
+    return request(app.getHttpServer())
+      .delete('/apps/10')
+      .set('Authorization', 'Bearer ' + token)
+      .expect(400)
+      .expect({
+        message: 'app not found',
+        error: 'Bad Request',
+        statusCode: 400,
+      });
+  });
 
   afterAll(async () => {
     await app.close();

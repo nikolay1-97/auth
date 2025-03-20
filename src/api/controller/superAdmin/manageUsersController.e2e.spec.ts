@@ -17,7 +17,7 @@ describe('ManageAppAdminsController (e2e)', () => {
     await app.init();
   });
 
-  it('/super-admin-users/user/10 (PATCH)', async () => {
+  it('/super-admin-users/user/3 (PATCH)', async () => {
     const loginResponse = await request(app.getHttpServer())
       .post('/super-admin/login')
       .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
@@ -26,17 +26,15 @@ describe('ManageAppAdminsController (e2e)', () => {
     const token = loginResponse.body.access_token;
 
     return request(app.getHttpServer())
-      .patch('/super-admin-users/user/10')
+      .patch('/super-admin-users/user/3')
       .send({ email: 'newemail@mail.ru' })
       .set('Authorization', 'Bearer ' + token)
-      .expect(400)
+      .expect(200)
       .expect({
-        message: 'user not found',
-        error: 'Bad Request',
-        statusCode: 400,
+        email: 'newemail@mail.ru',
       });
   }),
-    it('/super-admin-users/users/1 (PATCH)', async () => {
+    it('/super-admin-users/user/10 (PATCH)', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/super-admin/login')
         .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
@@ -45,7 +43,26 @@ describe('ManageAppAdminsController (e2e)', () => {
       const token = loginResponse.body.access_token;
 
       return request(app.getHttpServer())
-        .patch('/super-admin-users/users/1')
+        .patch('/super-admin-users/user/10')
+        .send({ email: 'newemail@mail.ru' })
+        .set('Authorization', 'Bearer ' + token)
+        .expect(400)
+        .expect({
+          message: 'user not found',
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    }),
+    it('/super-admin-users/users/3 (PATCH)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .patch('/super-admin-users/users/3')
         .send({ password: 'qwertyui' })
         .set('Authorization', 'Bearer ' + token)
         .expect(200)
@@ -64,6 +81,41 @@ describe('ManageAppAdminsController (e2e)', () => {
       return request(app.getHttpServer())
         .patch('/super-admin-users/users/10')
         .send({ password: 'qwertyui' })
+        .set('Authorization', 'Bearer ' + token)
+        .expect(400)
+        .expect({
+          message: 'user not found',
+          error: 'Bad Request',
+          statusCode: 400,
+        });
+    }),
+    it('/super-admin-users/user/3 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin-users/user/3')
+        .set('Authorization', 'Bearer ' + token)
+        .expect(200)
+        .expect({
+          id: 3,
+          email: 'newemail@mail.ru',
+        });
+    }),
+    it('/super-admin-users/user/3 (DELETE)', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/super-admin/login')
+        .send({ email: 'superAdmin@mail.ru', password: 'qwerty' })
+        .expect(201);
+
+      const token = loginResponse.body.access_token;
+
+      return request(app.getHttpServer())
+        .delete('/super-admin-users/user/3')
         .set('Authorization', 'Bearer ' + token)
         .expect(400)
         .expect({

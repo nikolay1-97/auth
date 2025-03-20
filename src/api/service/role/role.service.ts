@@ -21,7 +21,10 @@ export class RoleService {
     if (!app) {
       throw new BadRequestException('app not found');
     }
-    const role = await this.roleRepository.getByTitle(dto.title);
+    const role = await this.roleRepository.getByAppIdAndTitle(
+      dto.app_id,
+      dto.title,
+    );
 
     if (!role) {
       await this.roleRepository.create(dto);

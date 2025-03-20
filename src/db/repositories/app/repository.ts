@@ -61,6 +61,21 @@ export class AppRepository {
     }
   }
 
+  async getItemByOwnerIdAndAppId(owner_id: number, app_id: number) {
+    try {
+      const app: App[] | undefined = await this.modelClass
+        .query()
+        .select('*')
+        .where('owner_id', '=', owner_id)
+        .where('id', '=', app_id);
+
+      return app[0];
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   async create(appAdminId: number, secret: string, dto: CreateAppDto) {
     try {
       const data: object = {
