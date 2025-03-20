@@ -31,37 +31,20 @@ export class UserRoleCreateGuards implements CanActivate {
     if (!payload) {
       throw new UnauthorizedException();
     }
-    let cnt: number = 0;
 
-    const users = await this.userRepository.getByAppIdAndOwnerId(
+    const user = await this.userRepository.getByAppIdAndOwnerId(
       app_id,
       payload.sub,
+      user_id,
     );
-    if (users.length == 0) {
-      throw new BadRequestException('users not found');
-    }
 
-    for (let count = 0; count <= users.length - 1; count++) {
-      if (users[count].id == user_id) {
-        cnt = cnt + 1;
-      }
-    }
-
-    const roles = await this.roleRepository.getByAppIdAndOwnerId(
+    const role = await this.roleRepository.getByAppIdAndOwnerId(
       app_id,
       payload.sub,
+      role_id,
     );
-    if (roles.length == 0) {
-      throw new BadRequestException('roles not found');
-    }
 
-    for (let count = 0; count <= roles.length - 1; count++) {
-      if (roles[count].id == role_id) {
-        cnt = cnt + 1;
-      }
-    }
-
-    if (cnt != 2) {
+    if (!user || !role) {
       throw new BadRequestException('user or role not found');
     }
 

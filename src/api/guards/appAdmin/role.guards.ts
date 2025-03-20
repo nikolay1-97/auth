@@ -35,20 +35,15 @@ export class RoleGuards implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const roles = await this.roleRepositrory.getByAppIdAndOwnerId(
+    const role = await this.roleRepositrory.getByAppIdAndOwnerId(
       app_id,
       payload.sub,
+      role_id,
     );
-    if (roles.length == 0) {
+    if (!role) {
       throw new BadRequestException('roles not found');
     }
 
-    for (let count = 0; count <= roles.length - 1; count++) {
-      if (roles[count].id == role_id) {
-        return true;
-      }
-    }
-
-    throw new BadRequestException('roles not found');
+    return true;
   }
 }

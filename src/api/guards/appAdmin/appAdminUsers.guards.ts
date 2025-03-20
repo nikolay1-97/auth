@@ -28,20 +28,16 @@ export class AppAdminUsersGuards implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    const users = await this.userRepositrory.getByAppIdAndOwnerId(
+    const user = await this.userRepositrory.getByAppIdAndOwnerId(
       app_id,
       payload.sub,
+      user_id,
     );
-    if (users.length == 0) {
+    if (!user) {
       throw new BadRequestException('users not found');
     }
 
-    for (let count = 0; count <= users.length - 1; count++) {
-      if (users[count].id == user_id) {
-        return true;
-      }
-    }
-
-    throw new BadRequestException('users not found');
+    return true;
   }
+
 }

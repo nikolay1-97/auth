@@ -33,17 +33,22 @@ export class RoleRepository {
     }
   }
 
-  async getByAppIdAndOwnerId(app_id: number, owner_id: number) {
+  async getByAppIdAndOwnerId(
+    app_id: number,
+    owner_id: number,
+    role_id: number,
+  ) {
     try {
       const roles: Role[] | undefined = await this.modelClass
         .query()
+        .where('roles.id', '=', role_id)
         .where('roles.app_id', '=', app_id)
         .where('owner_id', '=', owner_id)
         .join('app', 'roles.app_id', '=', 'app.id')
         .join('app_admin', 'app_admin.id', '=', 'app.owner_id')
         .select('roles.id', 'roles.title');
 
-      return roles;
+      return roles[0];
     } catch (e) {
       console.log(e);
       throw e;
