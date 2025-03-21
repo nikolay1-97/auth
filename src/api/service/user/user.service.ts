@@ -23,7 +23,6 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly appRepository: AppRepository,
     private readonly roleRepository: RoleRepository,
-    private readonly passwordService: PasswordService,
   ) {}
 
   async create(dto: CreateUserDto): Promise<CreateUserResponseDto> {
@@ -62,10 +61,6 @@ export class UserService {
   }
 
   async getByAppId(app_id: number): Promise<GetUsersByAppIdUserResponseDto[]> {
-    const app = await this.appRepository.getById(app_id);
-    if (!app) {
-      throw new BadRequestException('app not found');
-    }
     const users = await this.userRepository.getByAppid(app_id);
 
     return plainToInstance(GetUsersByAppIdUserResponseDto, users);
@@ -87,16 +82,6 @@ export class UserService {
     app_id: number,
     role_id: number,
   ): Promise<GetUsersByAppIdAndRoleIdResponseDto[]> {
-    const app = await this.appRepository.getById(app_id);
-    if (!app) {
-      throw new BadRequestException('app not found');
-    }
-
-    const role = await this.roleRepository.getById(role_id);
-    if (!role) {
-      throw new BadRequestException('role not found');
-    }
-
     const users = await this.userRepository.getByAppIdAndRoleId(
       app_id,
       role_id,

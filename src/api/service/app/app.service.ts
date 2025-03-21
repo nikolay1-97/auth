@@ -31,11 +31,6 @@ export class AppsService {
   }
 
   async update(id: number): Promise<boolean | undefined> {
-    const app = await this.appRepository.getById(id);
-
-    if (!app) {
-      throw new BadRequestException('app not found');
-    }
     const secret = await this.secretService.getSecret();
     await this.appRepository.update(id, secret);
     return true;

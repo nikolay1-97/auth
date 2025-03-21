@@ -17,16 +17,6 @@ export class UserRoleService {
   ) {}
 
   async create(dto: CreateUserRoleDto): Promise<CreateUserRoleResponseDto> {
-    const user = await this.userRepository.getById(dto.user_id);
-    if (!user) {
-      throw new BadRequestException('user not found');
-    }
-    const role = await this.roleRepository.getById(dto.role_id);
-
-    if (!role) {
-      throw new BadRequestException('role not found');
-    }
-
     const userRole = await this.userRoleRepository.getRowByUserIdAndRoleId(
       dto.user_id,
       dto.role_id,
@@ -74,10 +64,6 @@ export class UserRoleService {
   }
 
   async getUserRoles(user_id: number): Promise<GetUserRolesResponseDto[]> {
-    const user = await this.userRepository.getById(user_id);
-    if (!user) {
-      throw new BadRequestException('user not found');
-    }
     const userRoles = await this.userRoleRepository.getUserRoles(user_id);
 
     return plainToInstance(GetUserRolesResponseDto, userRoles);

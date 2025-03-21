@@ -17,10 +17,6 @@ export class RoleService {
   ) {}
 
   async create(dto: CreateRoleDto): Promise<CreateRoleResponseDto> {
-    const app = await this.appRepository.getById(dto.app_id);
-    if (!app) {
-      throw new BadRequestException('app not found');
-    }
     const role = await this.roleRepository.getByAppIdAndTitle(
       dto.app_id,
       dto.title,
@@ -40,11 +36,6 @@ export class RoleService {
     id: number,
     dto: RoleChangeTitleDto,
   ): Promise<RoleChangeTitleResponseDto> {
-    const role = await this.roleRepository.getById(id);
-
-    if (!role) {
-      throw new BadRequestException('role not found');
-    }
     const roleByTitle = await this.roleRepository.getByTitle(dto.title);
     if (roleByTitle) {
       throw new BadRequestException('role already exists');
@@ -68,10 +59,6 @@ export class RoleService {
   }
 
   async getListByAppId(id: number): Promise<RoleGetListByAppIdResponseDto[]> {
-    const app = await this.appRepository.getById(id);
-    if (!app) {
-      throw new BadRequestException('app not found');
-    }
     const roles = await this.roleRepository.getByAppId(id);
 
     return plainToInstance(RoleGetListByAppIdResponseDto, roles);
